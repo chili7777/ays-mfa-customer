@@ -1,0 +1,8 @@
+services:
+  ays-mfa-customer:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile
+    image: ghcr.io/chili7777/ays-mfa-customer:local
+    ports:
+      - "8082:80"
