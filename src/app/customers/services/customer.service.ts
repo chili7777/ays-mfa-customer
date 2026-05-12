@@ -32,11 +32,14 @@ export class CustomerService {
         else if (response && response.data && Array.isArray(response.data)) customers = response.data;
         else if (response && response.customers && Array.isArray(response.customers)) customers = response.customers;
 
-        // Normalizar ID para asegurar navegación
-        return customers.map((c: any) => ({
-          ...c,
-          id: c.id || c._id || c.identification // fallback si no hay id
-        }));
+        // Normalizar ID para asegurar navegación (Priorizar UUID sobre identificación)
+        return customers.map((c: any) => {
+          const uuid = c.uuid || c._id || c.customerId;
+          return {
+            ...c,
+            id: uuid || c.id || c.identification
+          };
+        });
       })
     );
   }
@@ -45,9 +48,10 @@ export class CustomerService {
     return this.http.get<any>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() }).pipe(
       map(response => {
         const data = response.data || response.customer || response;
+        const uuid = data.uuid || data._id || data.customerId;
         return {
           ...data,
-          id: data.id || data._id || id
+          id: uuid || data.id || id
         };
       })
     );
