@@ -1,14 +1,30 @@
 <div class="container py-4 d-flex justify-content-center align-items-center" style="min-height: 90vh;">
   <div class="w-100 animate-fade-in" style="max-width: 500px;">
 
-    <header class="mb-5 text-center mt-4">
+    <header class="mb-5 text-center mt-4 position-relative">
+      <button class="btn btn-icon position-absolute top-0 start-0" (click)="goBack()" title="Volver">
+        <span class="material-icons">arrow_back</span>
+      </button>
+
       <div class="d-inline-flex p-3 rounded-circle mb-3" style="color: var(--accent-color);">
         <span class="material-icons" style="font-size: 32px;">person</span>
       </div>
       <h1 class="h3 mb-2 fw-bold">Ficha del Cliente</h1>
-      <p class="text-secondary px-4">
+      <p class="text-secondary px-4 mb-3">
         {{ customer()?.name || 'Información detallada' }}
       </p>
+
+      @if (customer(); as c) {
+        <div class="d-flex justify-content-center align-items-center gap-3 animate-fade-in mb-2">
+          <span class="fw-medium small" [style.color]="c.status ? '#00c076' : '#d41020'">
+            {{ c.status ? 'Cuenta Activa' : 'Cuenta Inactiva' }}
+          </span>
+          <label class="switch" style="transform: scale(0.8);" [title]="c.status ? 'Desactivar cuenta' : 'Activar cuenta'">
+            <input type="checkbox" [checked]="c.status" (change)="toggleStatus()">
+            <span class="slider"></span>
+          </label>
+        </div>
+      }
     </header>
 
     @if (loading()) {
@@ -71,36 +87,7 @@
           <div class="form-control" style="border-bottom-color: rgba(43, 49, 57, 0.3);">{{c.address}}</div>
         </div>
 
-        <div class="mb-4 d-flex align-items-center justify-content-between p-4 rounded animate-fade-in"
-             style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
-          <div class="d-flex align-items-center gap-3">
-            <div class="status-pill p-3 rounded-circle d-flex align-items-center justify-content-center"
-                 [ngClass]="c.status ? 'active' : 'inactive'"
-                 style="width: 48px; height: 48px; padding: 0 !important;">
-              <span class="material-icons" style="font-size: 20px;">
-                {{ c.status ? 'check_circle' : 'block' }}
-              </span>
-            </div>
-            <div>
-              <label class="fw-bold d-none d-md-block mb-0" style="font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary);">
-                Estado de la Cuenta
-              </label>
-              <span class="fw-medium" [style.color]="c.status ? '#00c076' : '#d41020'">
-                {{ c.status ? 'Cuenta Activa' : 'Cuenta Inactiva' }}
-              </span>
-            </div>
-          </div>
-          <label class="switch" [title]="c.status ? 'Desactivar cuenta' : 'Activar cuenta'">
-            <input type="checkbox" [checked]="c.status" (change)="toggleStatus()">
-            <span class="slider"></span>
-          </label>
-        </div>
-
         <div class="mt-5 d-flex gap-3">
-          <button class="btn btn-secondary flex-grow-1" (click)="goBack()" title="Volver">
-            <span class="material-icons" style="font-size: 18px;">arrow_back</span>
-            <span class="d-none d-md-inline">Listado</span>
-          </button>
           <button class="btn btn-warning flex-grow-1" (click)="goToEdit()">
             <span class="material-icons" style="font-size: 18px;">edit</span>
             <span class="d-none d-md-inline">Editar</span>
