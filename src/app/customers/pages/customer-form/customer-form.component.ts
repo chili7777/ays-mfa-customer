@@ -84,7 +84,7 @@ export class CustomerFormComponent implements OnInit {
     }
 
     if (this.isEdit) {
-      this.customerService.updateCustomer(formValue, this.customerId!).subscribe({
+      this.customerService.patchCustomer(formValue, this.customerId!).subscribe({
         next: () => {
           alert('Cliente actualizado correctamente');
           this.goBack();
