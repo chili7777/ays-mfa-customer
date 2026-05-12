@@ -72,7 +72,12 @@ export class CustomerFormComponent implements OnInit {
   onSubmit(): void {
     if (this.customerForm.invalid) return;
 
-    const formValue = this.customerForm.value;
+    const formValue = { ...this.customerForm.value };
+
+    // Si es edición y el password está vacío, lo eliminamos para evitar errores de validación en el backend
+    if (this.isEdit && !formValue.password) {
+      delete formValue.password;
+    }
 
     if (this.isEdit) {
       this.customerService.updateCustomer(formValue, this.customerId!).subscribe({
@@ -80,7 +85,10 @@ export class CustomerFormComponent implements OnInit {
           alert('Cliente actualizado correctamente');
           this.goBack();
         },
-        error: (err: any) => alert('Error al actualizar el cliente')
+        error: (err: any) => {
+          console.error('Error al actualizar', err);
+          alert('Error al actualizar el cliente: ' + (err.error?.errors?.[0]?.businessMessage || 'Error desconocido'));
+        }
       });
     } else {
       this.customerService.createCustomer(formValue).subscribe({
@@ -88,7 +96,10 @@ export class CustomerFormComponent implements OnInit {
           alert('Cliente creado correctamente');
           this.goBack();
         },
-        error: (err: any) => alert('Error al crear el cliente')
+        error: (err: any) => {
+          console.error('Error al crear', err);
+          alert('Error al crear el cliente: ' + (err.error?.errors?.[0]?.businessMessage || 'Error desconocido'));
+        }
       });
     }
   }
