@@ -43,7 +43,7 @@ export class CustomersListComponent implements OnInit {
         this.customers.set(data);
         this.loading.set(false);
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al cargar clientes', err);
         this.loading.set(false);
       }
@@ -81,7 +81,7 @@ export class CustomersListComponent implements OnInit {
           this.showDeleteModal.set(false);
           alert('Cliente eliminado con éxito');
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Error al eliminar', err);
           alert('No se pudo eliminar el cliente. Verifique si tiene cuentas asociadas.');
           this.showDeleteModal.set(false);
@@ -92,13 +92,13 @@ export class CustomersListComponent implements OnInit {
 
   toggleStatus(customer: Customer): void {
     const newStatus = !customer.status;
-    this.customerService.updateCustomerStatus(customer.id, newStatus).subscribe({
+    this.customerService.patchCustomer({ status: newStatus }, customer.id).subscribe({
       next: () => {
         this.customers.update(prev =>
           prev.map(c => c.id === customer.id ? { ...c, status: newStatus } : c)
         );
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al actualizar estado', err);
         alert('No se pudo actualizar el estado del cliente.');
       }

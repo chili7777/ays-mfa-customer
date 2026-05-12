@@ -61,7 +61,7 @@ export class CustomerFormComponent implements OnInit {
           status: customer.status
         });
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al cargar cliente', err);
         alert('No se pudo cargar la información del cliente');
         this.goBack();
@@ -80,7 +80,7 @@ export class CustomerFormComponent implements OnInit {
           alert('Cliente actualizado correctamente');
           this.goBack();
         },
-        error: (err) => alert('Error al actualizar el cliente')
+        error: (err: any) => alert('Error al actualizar el cliente')
       });
     } else {
       this.customerService.createCustomer(formValue).subscribe({
@@ -88,7 +88,7 @@ export class CustomerFormComponent implements OnInit {
           alert('Cliente creado correctamente');
           this.goBack();
         },
-        error: (err) => alert('Error al crear el cliente')
+        error: (err: any) => alert('Error al crear el cliente')
       });
     }
   }

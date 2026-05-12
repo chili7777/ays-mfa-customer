@@ -37,7 +37,7 @@ export class CustomerDetailComponent implements OnInit {
         this.customer.set(data);
         this.loading.set(false);
       },
-      error: (err) => {
+      error: (err: any) => {
         this.errorMessage.set('Error al cargar la información del cliente.');
         this.loading.set(false);
       }
@@ -59,7 +59,7 @@ export class CustomerDetailComponent implements OnInit {
         next: () => {
           this.customer.update(prev => prev ? { ...prev, status: newStatus } : null);
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Error al actualizar estado', err);
           alert('No se pudo actualizar el estado del cliente.');
         }
@@ -75,7 +75,7 @@ export class CustomerDetailComponent implements OnInit {
           this.showDeleteModal.set(false);
           this.router.navigate(['/customers']);
         },
-        error: (err) => {
+        error: (err: any) => {
           this.errorMessage.set('No se pudo eliminar el cliente. Verifique dependencias.');
           this.showDeleteModal.set(false);
         }
