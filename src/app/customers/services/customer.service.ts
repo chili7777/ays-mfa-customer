@@ -12,8 +12,8 @@ export class CustomerService {
 
   private getHeaders(isJson = false): HttpHeaders {
     const headers: any = {
-      'X-Guid': '00000000-0000-0000-0000-000000000000',
-      'X-App': 'terminal-curl',
+      'x-guid': '550e8400-e29b-41d4-a716-446655440000',
+      'x-app': 'postman-test',
       'Accept': 'application/json'
     };
 

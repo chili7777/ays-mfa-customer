@@ -45,7 +45,7 @@
               </div>
               <div class="text-secondary small">{{customer.identification}} | {{customer.email}}</div>
             </div>
-            <span class="text-secondary">›</span>
+            <span class="material-icons text-secondary">chevron_right</span>
           </div>
         </div>
       </div>
@@ -59,11 +59,11 @@
               <th>Identificación</th>
               <th>Email</th>
               <th>Estado</th>
-              <th class="text-end">Acciones</th>
+              <th class="text-end" style="width: 100px;"></th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let customer of filteredCustomers()">
+            <tr *ngFor="let customer of filteredCustomers()" (click)="goToDetail(customer.id)" class="cursor-pointer">
               <td class="fw-bold">{{customer.name}}</td>
               <td>{{customer.identification}}</td>
               <td>{{customer.email}}</td>
@@ -73,10 +73,7 @@
                 </span>
               </td>
               <td class="text-end">
-                <div class="d-flex justify-content-end gap-2">
-                  <button class="btn btn-secondary btn-sm" (click)="goToDetail(customer.id)">Ver</button>
-                  <button class="btn btn-danger btn-sm" (click)="confirmDelete(customer.id)">Eliminar</button>
-                </div>
+                <span class="material-icons text-secondary" style="font-size: 20px;">chevron_right</span>
               </td>
             </tr>
           </tbody>

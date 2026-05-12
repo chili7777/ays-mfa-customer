@@ -374,6 +374,7 @@ input:checked + .slider:before {
 .fw-bold { font-weight: 700 !important; }
 .fw-medium { font-weight: 500 !important; }
 .small { font-size: 0.875rem !important; }
+.cursor-pointer { cursor: pointer !important; }
 .overflow-hidden { overflow: hidden !important; }
 .border-bottom { border-bottom: 1px solid $theme-dark-border !important; }
 
