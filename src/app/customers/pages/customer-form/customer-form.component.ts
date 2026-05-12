@@ -40,9 +40,6 @@ export class CustomerFormComponent implements OnInit {
     this.customerId = this.route.snapshot.paramMap.get('id');
     if (this.customerId) {
       this.isEdit = true;
-      // En edición el password no suele ser obligatorio a menos que se quiera cambiar
-      this.customerForm.get('password')?.clearValidators();
-      this.customerForm.get('password')?.updateValueAndValidity();
       this.loadCustomer(this.customerId);
     }
   }
@@ -78,13 +75,8 @@ export class CustomerFormComponent implements OnInit {
 
     const formValue = { ...this.customerForm.value };
 
-    // Si es edición y el password está vacío, lo eliminamos para evitar errores de validación en el backend
-    if (this.isEdit && !formValue.password) {
-      delete formValue.password;
-    }
-
     if (this.isEdit) {
-      this.customerService.patchCustomer(formValue, this.customerId!).subscribe({
+      this.customerService.updateCustomer(formValue, this.customerId!).subscribe({
         next: () => {
           alert('Cliente actualizado correctamente');
           this.goBack();
@@ -133,9 +125,7 @@ export class CustomerFormComponent implements OnInit {
              this.customerForm.get('address')!.valid;
     }
     if (this.currentStep === 3) {
-      if (!this.isEdit) {
-        return this.customerForm.get('password')!.valid;
-      }
+      return this.customerForm.get('password')!.valid;
     }
     return true;
   }
@@ -153,9 +143,7 @@ export class CustomerFormComponent implements OnInit {
       this.customerForm.get('address')!.markAsTouched();
     }
     if (this.currentStep === 3) {
-      if (!this.isEdit) {
-        this.customerForm.get('password')!.markAsTouched();
-      }
+      this.customerForm.get('password')!.markAsTouched();
     }
   }
 

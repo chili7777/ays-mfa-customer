@@ -91,7 +91,7 @@
 
         <!-- Step 3: Security & Status -->
         <div *ngIf="currentStep === 3" class="step-content animate-fade-in">
-          <div class="mb-4" *ngIf="!isEdit">
+          <div class="mb-4">
             <label class="text-secondary small d-block mb-2">Contraseña de acceso</label>
             <input type="password" formControlName="password" class="form-control" [class.is-invalid]="customerForm.get('password')?.invalid && customerForm.get('password')?.touched" placeholder="Mínimo 6 caracteres">
             <div class="invalid-feedback animate-fade-in" *ngIf="customerForm.get('password')?.invalid && customerForm.get('password')?.touched">
