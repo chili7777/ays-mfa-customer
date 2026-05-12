@@ -45,33 +45,40 @@
         <div class="px-3 cursor-pointer" *ngFor="let customer of filteredCustomers()" (click)="goToDetail(customer.id)">
           <div class="py-3 d-flex justify-content-between align-items-center" style="border-bottom: 1px solid var(--border-color, rgba(43, 49, 57, 0.5));">
             <div class="flex-grow-1">
+              <!-- Nombre y Luz de Estado (No quitar luz verde o roja) -->
               <div class="d-flex align-items-center gap-2 mb-1">
                 <span [class]="customer.status ? 'status-dot active' : 'status-dot'"></span>
-                <span class="fw-bold text-truncate" style="max-width: 200px;">{{customer.name}}</span>
+                <span class="fw-bold text-truncate" style="max-width: 250px;">{{customer.name}}</span>
               </div>
-              <div class="d-flex align-items-center flex-wrap gap-3 mb-1">
-                <span class="text-secondary small d-flex align-items-center gap-2">
+
+              <!-- Cédula y Teléfono (Juntos) -->
+              <div class="d-flex align-items-center gap-3 mb-0">
+                <span class="text-secondary small d-flex align-items-center gap-1">
                   <span class="material-icons" style="font-size: 14px; opacity: 0.5;">badge</span>
                   {{customer.identification}}
                 </span>
-                <span class="text-secondary small d-flex align-items-center gap-2">
+                <span class="text-secondary small d-flex align-items-center gap-1">
+                  <span class="material-icons" style="font-size: 14px; opacity: 0.5;">phone</span>
+                  {{customer.phone}}
+                </span>
+              </div>
+
+              <!-- Correo (Abajo de los dos) -->
+              <div class="mb-1">
+                <span class="text-secondary small d-flex align-items-center gap-1">
                   <span class="material-icons" style="font-size: 14px; opacity: 0.5;">email</span>
                   {{customer.email}}
                 </span>
               </div>
-              <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-2">
-                  <label class="switch" style="transform: scale(0.7); transform-origin: left center;" (click)="$event.stopPropagation()" [title]="customer.status ? 'Desactivar' : 'Activar'">
-                    <input type="checkbox" [checked]="customer.status" (change)="toggleStatus(customer)">
-                    <span class="slider"></span>
-                  </label>
-                  <span class="small" [style.color]="customer.status ? '#00c076' : '#848e9c'">
-                    {{customer.status ? 'Activo' : 'Inactivo'}}
-                  </span>
-                </div>
-                <span class="text-secondary small d-flex align-items-center gap-2">
-                  <span class="material-icons" style="font-size: 14px; opacity: 0.5;">phone</span>
-                  {{customer.phone}}
+
+              <!-- Toggle de Activo (Abajo de ese, más junto) -->
+              <div class="d-flex align-items-center gap-2" style="margin-top: -2px;">
+                <label class="switch" style="transform: scale(0.65); transform-origin: left center;" (click)="$event.stopPropagation()" [title]="customer.status ? 'Desactivar' : 'Activar'">
+                  <input type="checkbox" [checked]="customer.status" (change)="toggleStatus(customer)">
+                  <span class="slider"></span>
+                </label>
+                <span class="small fw-medium" [style.color]="customer.status ? '#00c076' : '#848e9c'" style="font-size: 11px; margin-left: -8px;">
+                  {{customer.status ? 'Activo' : 'Inactivo'}}
                 </span>
               </div>
             </div>
