@@ -475,6 +475,14 @@ input:checked + .slider:before {
   .d-md-inline { display: inline !important; }
   .d-md-block { display: block !important; }
   .d-md-flex { display: flex !important; }
+  .d-md-none { display: none !important; }
+}
+
+@media (min-width: 992px) {
+  .d-lg-inline { display: inline !important; }
+  .d-lg-block { display: block !important; }
+  .d-lg-flex { display: flex !important; }
+  .d-lg-none { display: none !important; }
 }
 
 .btn-icon {
