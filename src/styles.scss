@@ -225,11 +225,11 @@ select.form-control:focus {
   background-position: right 8px center;
 }
 
-/* Switch / Toggle */
+/* Switch / Toggle - Estilo Bancario Moderno */
 .switch {
   position: relative;
   display: inline-block;
-  width: 44px;
+  width: 48px;
   height: 24px;
 }
 
@@ -246,30 +246,82 @@ select.form-control:focus {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: $theme-dark-surface-hover;
-  transition: .4s;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 24px;
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 18px;
-  width: 18px;
+  height: 16px;
+  width: 16px;
   left: 3px;
   bottom: 3px;
-  background-color: $theme-dark-text-secondary;
-  transition: .4s;
+  background-color: #848e9c;
+  transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 input:checked + .slider {
-  background-color: $theme-dark-accent;
+  background-color: rgba($theme-dark-accent, 0.2);
+  border-color: rgba($theme-dark-accent, 0.4);
 }
 
 input:checked + .slider:before {
-  transform: translateX(20px);
-  background-color: white;
+  transform: translateX(24px);
+  background-color: $theme-dark-accent;
+}
+
+/* Status Badges & Pills */
+.status-pill {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.status-pill i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-pill.active {
+  background: rgba(0, 192, 118, 0.1);
+  color: #00c076;
+  border-color: rgba(0, 192, 118, 0.2);
+}
+
+.status-pill.active i {
+  background-color: #00c076;
+  box-shadow: 0 0 8px #00c076;
+}
+
+.status-pill.inactive {
+  background: rgba(212, 16, 32, 0.1);
+  color: #d41020;
+  border-color: rgba(212, 16, 32, 0.2);
+}
+
+.status-pill.inactive i {
+  background-color: #d41020;
+}
+
+.status-pill:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.2);
 }
 
 .form-control::placeholder {

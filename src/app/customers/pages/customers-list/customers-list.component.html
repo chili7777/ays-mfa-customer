@@ -45,13 +45,21 @@
         <div class="px-3 cursor-pointer" *ngFor="let customer of filteredCustomers()" (click)="goToDetail(customer.id)">
           <div class="py-3 d-flex justify-content-between align-items-center" style="border-bottom: 1px solid var(--border-color, rgba(43, 49, 57, 0.5));">
             <div>
-              <div class="d-flex align-items-center gap-2">
+              <div class="d-flex align-items-center gap-2 mb-1">
                 <span class="fw-bold">{{customer.name}}</span>
-                <span class="status-indicator" [ngClass]="customer.status ? 'status-active' : 'status-inactive'" [title]="customer.status ? 'Activo' : 'Inactivo'">
-                  •
-                </span>
               </div>
-              <div class="text-secondary small">{{customer.identification}} | {{customer.email}}</div>
+              <div class="d-flex align-items-center gap-2">
+                <div
+                  class="status-pill"
+                  [ngClass]="customer.status ? 'active' : 'inactive'"
+                  (click)="$event.stopPropagation(); toggleStatus(customer)"
+                  [title]="'Click para ' + (customer.status ? 'desactivar' : 'activar')"
+                >
+                  <i></i>
+                  {{customer.status ? 'Activo' : 'Inactivo'}}
+                </div>
+                <span class="text-secondary small">| {{customer.identification}}</span>
+              </div>
             </div>
             <span class="material-icons text-secondary">chevron_right</span>
           </div>

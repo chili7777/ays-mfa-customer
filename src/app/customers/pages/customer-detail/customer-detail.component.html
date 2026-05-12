@@ -71,12 +71,26 @@
           <div class="form-control" style="border-bottom-color: rgba(43, 49, 57, 0.3);">{{c.address}}</div>
         </div>
 
-        <div class="mb-4 d-flex align-items-center justify-content-between py-3 px-3 rounded" style="background: rgba(255,255,255,0.03);">
-          <div>
-            <label class="fw-medium d-block mb-0">Estado de Cuenta</label>
-            <span class="text-secondary small">{{c.status ? 'Activo' : 'Inactivo'}}</span>
+        <div class="mb-4 d-flex align-items-center justify-content-between p-4 rounded animate-fade-in"
+             style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+          <div class="d-flex align-items-center gap-3">
+            <div class="status-pill p-3 rounded-circle d-flex align-items-center justify-content-center"
+                 [ngClass]="c.status ? 'active' : 'inactive'"
+                 style="width: 48px; height: 48px; padding: 0 !important;">
+              <span class="material-icons" style="font-size: 20px;">
+                {{ c.status ? 'check_circle' : 'block' }}
+              </span>
+            </div>
+            <div>
+              <label class="fw-bold d-block mb-0" style="font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary);">
+                Estado de la Cuenta
+              </label>
+              <span class="fw-medium" [style.color]="c.status ? '#00c076' : '#d41020'">
+                {{ c.status ? 'Cuenta Activa' : 'Cuenta Inactiva' }}
+              </span>
+            </div>
           </div>
-          <label class="switch">
+          <label class="switch" [title]="c.status ? 'Desactivar cuenta' : 'Activar cuenta'">
             <input type="checkbox" [checked]="c.status" (change)="toggleStatus()">
             <span class="slider"></span>
           </label>
