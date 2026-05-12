@@ -19,6 +19,8 @@ export class CustomerFormComponent implements OnInit {
   customerForm: FormGroup;
   isEdit = false;
   customerId: string | null = null;
+  currentStep = 1;
+  totalSteps = 3;
 
   constructor() {
     this.customerForm = this.fb.group({
@@ -88,6 +90,18 @@ export class CustomerFormComponent implements OnInit {
         },
         error: (err) => alert('Error al crear el cliente')
       });
+    }
+  }
+
+  nextStep(): void {
+    if (this.currentStep < this.totalSteps) {
+      this.currentStep++;
+    }
+  }
+
+  prevStep(): void {
+    if (this.currentStep > 1) {
+      this.currentStep--;
     }
   }
 
