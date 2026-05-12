@@ -47,18 +47,32 @@
             <div class="flex-grow-1">
               <div class="d-flex align-items-center gap-2 mb-1">
                 <span [class]="customer.status ? 'status-dot active' : 'status-dot'"></span>
-                <span class="fw-bold text-truncate" style="max-width: 200px;">👤 {{customer.name}}</span>
+                <span class="fw-bold text-truncate" style="max-width: 200px;">{{customer.name}}</span>
               </div>
-              <div class="d-flex align-items-center gap-3">
-                <span class="text-secondary small">🆔 {{customer.identification}}</span>
-                <label class="switch" style="transform: scale(0.7); transform-origin: left center;" (click)="$event.stopPropagation()" [title]="customer.status ? 'Desactivar' : 'Activar'">
-                  <input type="checkbox" [checked]="customer.status" (change)="toggleStatus(customer)">
-                  <span class="slider"></span>
-                </label>
+              <div class="d-flex align-items-center flex-wrap gap-3 mb-1">
+                <span class="text-secondary small d-flex align-items-center gap-2">
+                  <span class="material-icons" style="font-size: 14px; opacity: 0.5;">badge</span>
+                  {{customer.identification}}
+                </span>
+                <span class="text-secondary small d-flex align-items-center gap-2">
+                  <span class="material-icons" style="font-size: 14px; opacity: 0.5;">email</span>
+                  {{customer.email}}
+                </span>
               </div>
-              <div class="text-secondary small mt-1">
-                <span class="me-2">📧 {{customer.email}}</span>
-                <span>📱 {{customer.phone}}</span>
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                  <label class="switch" style="transform: scale(0.7); transform-origin: left center;" (click)="$event.stopPropagation()" [title]="customer.status ? 'Desactivar' : 'Activar'">
+                    <input type="checkbox" [checked]="customer.status" (change)="toggleStatus(customer)">
+                    <span class="slider"></span>
+                  </label>
+                  <span class="small" [style.color]="customer.status ? '#00c076' : '#848e9c'">
+                    {{customer.status ? 'Activo' : 'Inactivo'}}
+                  </span>
+                </div>
+                <span class="text-secondary small d-flex align-items-center gap-2">
+                  <span class="material-icons" style="font-size: 14px; opacity: 0.5;">phone</span>
+                  {{customer.phone}}
+                </span>
               </div>
             </div>
             <span class="material-icons text-secondary">chevron_right</span>
@@ -71,10 +85,10 @@
         <table class="table">
           <thead>
             <tr>
-              <th>👤 Nombre</th>
-              <th>🆔 Identificación</th>
-              <th>📧 Email</th>
-              <th>📱 Teléfono</th>
+              <th>Nombre</th>
+              <th>Identificación</th>
+              <th>Email</th>
+              <th>Teléfono</th>
               <th class="text-center">Estado</th>
               <th class="text-end" style="width: 120px;">Acciones</th>
             </tr>
@@ -87,14 +101,19 @@
                   <span class="fw-bold">{{customer.name}}</span>
                 </div>
               </td>
-              <td>{{customer.identification}}</td>
-              <td class="small">{{customer.email}}</td>
+              <td class="small text-secondary">{{customer.identification}}</td>
+              <td class="small text-secondary">{{customer.email}}</td>
               <td class="text-secondary small">{{customer.phone}}</td>
               <td class="text-center">
-                <label class="switch" style="transform: scale(0.8);" (click)="$event.stopPropagation()">
-                  <input type="checkbox" [checked]="customer.status" (change)="toggleStatus(customer)">
-                  <span class="slider"></span>
-                </label>
+                <div class="d-flex align-items-center justify-content-center gap-2">
+                  <label class="switch" style="transform: scale(0.8);" (click)="$event.stopPropagation()">
+                    <input type="checkbox" [checked]="customer.status" (change)="toggleStatus(customer)">
+                    <span class="slider"></span>
+                  </label>
+                  <span class="small fw-medium" [style.color]="customer.status ? '#00c076' : '#848e9c'" style="min-width: 55px; text-align: left;">
+                    {{customer.status ? 'Activo' : 'Inactivo'}}
+                  </span>
+                </div>
               </td>
               <td class="text-end">
                 <div class="d-flex justify-content-end gap-2">

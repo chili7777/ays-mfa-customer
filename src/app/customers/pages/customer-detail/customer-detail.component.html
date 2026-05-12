@@ -1,7 +1,7 @@
 <div class="container py-4 d-flex justify-content-center align-items-center" style="min-height: 90vh;">
   <div class="w-100 animate-fade-in position-relative" style="max-width: 500px;">
 
-    <button class="btn btn-icon position-absolute" style="top: 1.5rem; left: -1rem;" (click)="goBack()" title="Volver">
+    <button class="btn btn-icon position-absolute" style="top: 1.5rem; left: -3rem;" (click)="goBack()" title="Volver">
       <span class="material-icons">arrow_back</span>
     </button>
 
@@ -16,6 +16,7 @@
 
       @if (customer(); as c) {
         <div class="d-flex justify-content-center align-items-center gap-3 animate-fade-in mb-2">
+          <span [class]="c.status ? 'status-dot active' : 'status-dot'"></span>
           <span class="fw-medium small" [style.color]="c.status ? '#00c076' : '#d41020'">
             {{ c.status ? 'Cuenta Activa' : 'Cuenta Inactiva' }}
           </span>
@@ -55,35 +56,53 @@
     } @else if (customer(); as c) {
       <div class="surface-alt p-4 shadow-sm">
         <div class="mb-4">
-          <label class="text-secondary small d-block mb-2">Identificación</label>
+          <label class="text-secondary small d-flex align-items-center gap-2 mb-2">
+            <span class="material-icons" style="font-size: 14px; opacity: 0.5;">badge</span>
+            Identificación
+          </label>
           <div class="form-control" style="border-bottom-color: rgba(43, 49, 57, 0.3);">{{c.identification}}</div>
         </div>
 
         <div class="mb-4">
-          <label class="text-secondary small d-block mb-2">Correo Electrónico</label>
+          <label class="text-secondary small d-flex align-items-center gap-2 mb-2">
+            <span class="material-icons" style="font-size: 14px; opacity: 0.5;">email</span>
+            Correo Electrónico
+          </label>
           <div class="form-control" style="border-bottom-color: rgba(43, 49, 57, 0.3);">{{c.email}}</div>
         </div>
 
         <div class="row">
           <div class="col-6 mb-4">
-            <label class="text-secondary small d-block mb-2">Género</label>
+            <label class="text-secondary small d-flex align-items-center gap-2 mb-2">
+              <span class="material-icons" style="font-size: 14px; opacity: 0.5;">wc</span>
+              Género
+            </label>
             <div class="form-control" style="border-bottom-color: rgba(43, 49, 57, 0.3);">
               {{c.gender === 'MALE' ? 'Masculino' : c.gender === 'FEMALE' ? 'Femenino' : 'Otro'}}
             </div>
           </div>
           <div class="col-6 mb-4">
-            <label class="text-secondary small d-block mb-2">Edad</label>
+            <label class="text-secondary small d-flex align-items-center gap-2 mb-2">
+              <span class="material-icons" style="font-size: 14px; opacity: 0.5;">cake</span>
+              Edad
+            </label>
             <div class="form-control" style="border-bottom-color: rgba(43, 49, 57, 0.3);">{{c.age}} años</div>
           </div>
         </div>
 
         <div class="mb-4">
-          <label class="text-secondary small d-block mb-2">Teléfono de Contacto</label>
+          <label class="text-secondary small d-flex align-items-center gap-2 mb-2">
+            <span class="material-icons" style="font-size: 14px; opacity: 0.5;">phone</span>
+            Teléfono de Contacto
+          </label>
           <div class="form-control" style="border-bottom-color: rgba(43, 49, 57, 0.3);">{{c.phone}}</div>
         </div>
 
         <div class="mb-4">
-          <label class="text-secondary small d-block mb-2">Dirección de Domicilio</label>
+          <label class="text-secondary small d-flex align-items-center gap-2 mb-2">
+            <span class="material-icons" style="font-size: 14px; opacity: 0.5;">location_on</span>
+            Dirección de Domicilio
+          </label>
           <div class="form-control" style="border-bottom-color: rgba(43, 49, 57, 0.3);">{{c.address}}</div>
         </div>
 
