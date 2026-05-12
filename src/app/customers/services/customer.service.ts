@@ -27,17 +27,29 @@ export class CustomerService {
   getCustomers(): Observable<Customer[]> {
     return this.http.get<any>(this.apiUrl, { headers: this.getHeaders() }).pipe(
       map(response => {
-        if (Array.isArray(response)) return response;
-        if (response && response.data && Array.isArray(response.data)) return response.data;
-        if (response && response.customers && Array.isArray(response.customers)) return response.customers;
-        return [];
+        let customers = [];
+        if (Array.isArray(response)) customers = response;
+        else if (response && response.data && Array.isArray(response.data)) customers = response.data;
+        else if (response && response.customers && Array.isArray(response.customers)) customers = response.customers;
+
+        // Normalizar ID para asegurar navegación
+        return customers.map((c: any) => ({
+          ...c,
+          id: c.id || c._id || c.identification // fallback si no hay id
+        }));
       })
     );
   }
 
   getCustomerById(id: string): Observable<Customer> {
     return this.http.get<any>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() }).pipe(
-      map(response => response.data || response.customer || response)
+      map(response => {
+        const data = response.data || response.customer || response;
+        return {
+          ...data,
+          id: data.id || data._id || id
+        };
+      })
     );
   }
 

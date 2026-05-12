@@ -84,6 +84,30 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid $theme-dark-border;
 }
 
+/* Responsive Card for Desktop */
+.desktop-card {
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 992px) {
+  .desktop-card {
+    background-color: rgba($theme-dark-surface, 0.4);
+    border-radius: $border-radius-base;
+    padding: 32px;
+    border: 1px solid $theme-dark-border;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  .desktop-card {
+    max-width: 1100px;
+  }
+}
+
 /* Buttons - Specific styling from prompt */
 .btn {
   display: inline-flex;
@@ -485,7 +509,7 @@ input:checked + .slider:before {
 @media (max-width: 767.98px) {
   .hide-mobile { display: none !important; }
   .container { padding: 0 16px; }
-  .surface, .surface-alt { border-radius: 0; margin-left: -16px; margin-right: -16px; }
+  .surface { border-radius: 0; margin-left: -16px; margin-right: -16px; }
 }
 
 @media (min-width: 768px) {
