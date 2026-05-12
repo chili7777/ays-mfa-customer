@@ -70,7 +70,11 @@ export class CustomerFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.customerForm.invalid) return;
+    if (this.customerForm.invalid) {
+      this.customerForm.markAllAsTouched();
+      alert('Por favor, complete todos los campos requeridos correctamente.');
+      return;
+    }
 
     const formValue = { ...this.customerForm.value };
 
@@ -87,7 +91,8 @@ export class CustomerFormComponent implements OnInit {
         },
         error: (err: any) => {
           console.error('Error al actualizar', err);
-          alert('Error al actualizar el cliente: ' + (err.error?.errors?.[0]?.businessMessage || 'Error desconocido'));
+          const errorMsg = err.error?.errors?.[0]?.businessMessage || err.error?.message || 'Error desconocido';
+          alert('Error al actualizar el cliente: ' + errorMsg);
         }
       });
     } else {
@@ -98,15 +103,59 @@ export class CustomerFormComponent implements OnInit {
         },
         error: (err: any) => {
           console.error('Error al crear', err);
-          alert('Error al crear el cliente: ' + (err.error?.errors?.[0]?.businessMessage || 'Error desconocido'));
+          const errorMsg = err.error?.errors?.[0]?.businessMessage || err.error?.message || 'Error desconocido';
+          alert('Error al crear el cliente: ' + errorMsg);
         }
       });
     }
   }
 
   nextStep(): void {
-    if (this.currentStep < this.totalSteps) {
-      this.currentStep++;
+    if (this.isStepValid()) {
+      if (this.currentStep < this.totalSteps) {
+        this.currentStep++;
+      }
+    } else {
+      this.markStepAsTouched();
+    }
+  }
+
+  isStepValid(): boolean {
+    if (this.currentStep === 1) {
+      return this.customerForm.get('name')!.valid &&
+             this.customerForm.get('identification')!.valid &&
+             this.customerForm.get('gender')!.valid &&
+             this.customerForm.get('age')!.valid;
+    }
+    if (this.currentStep === 2) {
+      return this.customerForm.get('email')!.valid &&
+             this.customerForm.get('phone')!.valid &&
+             this.customerForm.get('address')!.valid;
+    }
+    if (this.currentStep === 3) {
+      if (!this.isEdit) {
+        return this.customerForm.get('password')!.valid;
+      }
+    }
+    return true;
+  }
+
+  markStepAsTouched(): void {
+    if (this.currentStep === 1) {
+      this.customerForm.get('name')!.markAsTouched();
+      this.customerForm.get('identification')!.markAsTouched();
+      this.customerForm.get('gender')!.markAsTouched();
+      this.customerForm.get('age')!.markAsTouched();
+    }
+    if (this.currentStep === 2) {
+      this.customerForm.get('email')!.markAsTouched();
+      this.customerForm.get('phone')!.markAsTouched();
+      this.customerForm.get('address')!.markAsTouched();
+    }
+    if (this.currentStep === 3) {
+      if (!this.isEdit) {
+        this.customerForm.get('password')!.markAsTouched();
+      }
     }
   }
 
