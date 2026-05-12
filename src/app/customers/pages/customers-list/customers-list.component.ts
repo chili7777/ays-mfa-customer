@@ -63,6 +63,10 @@ export class CustomersListComponent implements OnInit {
     this.router.navigate(['/customers/detail', id]);
   }
 
+  goToEdit(id: string): void {
+    this.router.navigate(['/customers/edit', id]);
+  }
+
   confirmDelete(id: string): void {
     this.deleteId.set(id);
     this.showDeleteModal.set(true);

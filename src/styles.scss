@@ -402,6 +402,27 @@ input:checked + .slider:before {
 .overflow-hidden { overflow: hidden !important; }
 .border-bottom { border-bottom: 1px solid $theme-dark-border !important; }
 
+.btn-icon {
+  background: transparent;
+  border: none;
+  padding: 8px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: inherit;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    transform: scale(1.1);
+  }
+
+  &.text-warning:hover { background-color: rgba($theme-dark-warning, 0.1); }
+  &.text-danger:hover { background-color: rgba($theme-dark-error, 0.1); }
+}
+
 /* Animations */
 .animate-fade-in {
   animation: fadeIn 0.4s ease-out;
@@ -418,27 +439,41 @@ input:checked + .slider:before {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 20px;
 }
 
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba($theme-dark-accent, 0.1);
-  border-radius: 50%;
-  border-top-color: $theme-dark-accent;
-  animation: spin 1s ease-in-out infinite;
+.modern-loader {
+  position: relative;
+  width: 64px;
+  height: 64px;
+
+  .ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 4px solid transparent;
+    border-radius: 50%;
+    animation: modern-spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-top-color: var(--accent-color);
+
+    &:nth-child(1) { animation-delay: -0.45s; }
+    &:nth-child(2) { animation-delay: -0.3s; }
+    &:nth-child(3) { animation-delay: -0.15s; }
+  }
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+@keyframes modern-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .loading-text {
   color: $theme-dark-text-secondary;
-  font-size: 14px;
-  letter-spacing: 0.05em;
-  animation: pulse 1.5s ease-in-out infinite;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {

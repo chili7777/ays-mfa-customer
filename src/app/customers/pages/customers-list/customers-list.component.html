@@ -29,7 +29,11 @@
       </div>
 
       <div *ngIf="loading()" class="spinner-container py-5">
-        <div class="spinner"></div>
+        <div class="modern-loader">
+          <div class="ring"></div>
+          <div class="ring"></div>
+          <div class="ring"></div>
+        </div>
         <p class="loading-text mb-0">Cargando clientes...</p>
       </div>
 
@@ -51,7 +55,7 @@
         </div>
       </div>
 
-      <!-- Vista de Escritorio: Tabla minimalista -->
+      <!-- Vista de Escritorio/Tablet: Tabla completa -->
       <div class="hide-mobile" *ngIf="!loading()">
         <table class="table">
           <thead>
@@ -59,8 +63,9 @@
               <th>Nombre</th>
               <th>Identificación</th>
               <th>Email</th>
-              <th>Estado</th>
-              <th class="text-end" style="width: 100px;"></th>
+              <th>Teléfono</th>
+              <th class="text-center">Estado</th>
+              <th class="text-end" style="width: 120px;">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -68,13 +73,21 @@
               <td class="fw-bold">{{customer.name}}</td>
               <td>{{customer.identification}}</td>
               <td>{{customer.email}}</td>
-              <td>
+              <td class="text-secondary">{{customer.phone}}</td>
+              <td class="text-center">
                 <span class="status-indicator" [ngClass]="customer.status ? 'status-active' : 'status-inactive'" [title]="customer.status ? 'Activo' : 'Inactivo'">
                   •
                 </span>
               </td>
               <td class="text-end">
-                <span class="material-icons text-secondary" style="font-size: 20px;">chevron_right</span>
+                <div class="d-flex justify-content-end gap-1">
+                  <button class="btn-icon text-warning" (click)="$event.stopPropagation(); goToEdit(customer.id)" title="Editar">
+                    <span class="material-icons" style="font-size: 20px;">edit</span>
+                  </button>
+                  <button class="btn-icon text-danger" (click)="$event.stopPropagation(); confirmDelete(customer.id)" title="Eliminar">
+                    <span class="material-icons" style="font-size: 20px;">delete</span>
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>

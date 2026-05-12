@@ -56,3 +56,6 @@ Thumbs.db
 
 # Logs
 .output.txt
+
+# Custom instructions (Local only)
+custom-instructions/
