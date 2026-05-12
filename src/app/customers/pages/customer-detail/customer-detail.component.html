@@ -1,11 +1,11 @@
 <div class="container py-4 d-flex justify-content-center align-items-center" style="min-height: 90vh;">
-  <div class="w-100 animate-fade-in" style="max-width: 500px;">
+  <div class="w-100 animate-fade-in position-relative" style="max-width: 500px;">
 
-    <header class="mb-5 text-center mt-4 position-relative">
-      <button class="btn btn-icon position-absolute top-0 start-0" (click)="goBack()" title="Volver">
-        <span class="material-icons">arrow_back</span>
-      </button>
+    <button class="btn btn-icon position-absolute" style="top: 1.5rem; left: -1rem;" (click)="goBack()" title="Volver">
+      <span class="material-icons">arrow_back</span>
+    </button>
 
+    <header class="mb-5 text-center mt-4">
       <div class="d-inline-flex p-3 rounded-circle mb-3" style="color: var(--accent-color);">
         <span class="material-icons" style="font-size: 32px;">person</span>
       </div>

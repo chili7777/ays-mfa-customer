@@ -67,21 +67,6 @@ export class CustomersListComponent implements OnInit {
     this.router.navigate(['/customers/edit', id]);
   }
 
-  toggleStatus(customer: Customer): void {
-    const newStatus = !customer.status;
-    this.customerService.patchCustomer({ status: newStatus }, customer.id).subscribe({
-      next: () => {
-        this.customers.update(prev =>
-          prev.map(c => c.id === customer.id ? { ...c, status: newStatus } : c)
-        );
-      },
-      error: (err) => {
-        console.error('Error al actualizar estado', err);
-        alert('No se pudo actualizar el estado del cliente.');
-      }
-    });
-  }
-
   confirmDelete(id: string): void {
     this.deleteId.set(id);
     this.showDeleteModal.set(true);
