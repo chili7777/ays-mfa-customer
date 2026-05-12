@@ -434,8 +434,8 @@ input:checked + .slider:before {
 /* Responsive Adjustments */
 @media (max-width: 767.98px) {
   .hide-mobile { display: none !important; }
-  .container { padding: 0; }
-  .surface { border-radius: 0; }
+  .container { padding: 0 16px; }
+  .surface { border-radius: 0; margin-left: -16px; margin-right: -16px; }
 }
 
 @media (min-width: 768px) {

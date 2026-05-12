@@ -1,83 +1,75 @@
-<div class="container py-4">
-  <header class="d-flex justify-content-between align-items-center mb-4 px-2">
-    <div>
-      <h1 class="h3 mb-1">Clientes</h1>
-      <p class="text-secondary small mb-0">Gestión de base de datos de clientes y cuentas.</p>
-    </div>
-    <button class="btn btn-success" (click)="goToCreate()">
-      <span class="material-icons" style="font-size: 18px;">add</span>
-      Nuevo Cliente
-    </button>
-  </header>
-
-  <div class="surface p-0 overflow-hidden mb-4">
-    <div class="p-4 border-bottom" style="border-color: rgba(43, 49, 57, 0.5) !important;">
-      <div class="d-flex gap-3 align-items-center">
-        <div class="position-relative flex-grow-1">
-          <span class="material-icons position-absolute top-50 translate-middle-y text-secondary" style="font-size: 20px; left: 12px;">search</span>
-          <input
-            type="text"
-            class="form-control"
-            style="padding-left: 44px !important;"
-            placeholder="Buscar por nombre, identificación o email..."
-            [(ngModel)]="searchTerm"
-            (keyup.enter)="onSearch()"
-          >
-        </div>
-        <button class="btn btn-primary px-4" (click)="onSearch()" style="white-space: nowrap;">
-          Buscar
-        </button>
+<div class="container">
+  <!-- Section Búsqueda - Minimalista (Basado en accounts) -->
+  <section class="search-section py-4">
+    <div class="d-flex gap-2">
+      <div class="position-relative w-100">
+        <span class="material-icons position-absolute top-50 translate-middle-y ms-3 text-secondary" style="font-size: 18px;">search</span>
+        <input
+          type="text"
+          class="form-control ps-5"
+          placeholder="Buscar cliente (nombre, ID o email)..."
+          [(ngModel)]="searchTerm"
+          (keyup.enter)="onSearch()"
+        >
       </div>
+      <button class="btn btn-primary" type="button" (click)="onSearch()">
+        Buscar
+      </button>
+    </div>
+  </section>
+
+  <section class="list-section">
+    <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+      <h2 class="h5 mb-0">Clientes</h2>
+      <button class="btn btn-success btn-sm" (click)="goToCreate()">
+        + Nuevo
+      </button>
     </div>
 
-    <!-- Mobile View -->
+    <!-- Vista de Móvil: Lista minimalista -->
     <div class="show-mobile-only">
-      <div class="px-4" *ngFor="let customer of filteredCustomers; last as isLast" (click)="goToDetail(customer.id)">
-        <div class="py-4 d-flex justify-content-between align-items-center" [style.border-bottom]="isLast ? 'none' : '1px solid #2b3139'">
+      <div class="px-3" *ngFor="let customer of filteredCustomers" (click)="goToDetail(customer.id)">
+        <div class="py-3 d-flex justify-content-between align-items-center" style="border-bottom: 1px solid var(--border-color, rgba(43, 49, 57, 0.5));">
           <div>
-            <div class="d-flex align-items-center gap-2 mb-1">
+            <div class="d-flex align-items-center gap-2">
               <span class="fw-bold">{{customer.name}}</span>
-              <span class="status-badge" [ngClass]="customer.status ? 'status-active' : 'status-inactive'">
+              <span class="status-indicator" [ngClass]="customer.status ? 'status-active' : 'status-inactive'" [title]="customer.status ? 'Activo' : 'Inactivo'">
                 •
               </span>
             </div>
             <div class="text-secondary small">{{customer.identification}} | {{customer.email}}</div>
           </div>
-          <span class="text-secondary material-icons">chevron_right</span>
+          <span class="text-secondary">›</span>
         </div>
       </div>
     </div>
 
-    <!-- Desktop View -->
+    <!-- Vista de Escritorio: Tabla minimalista -->
     <div class="hide-mobile">
       <table class="table">
         <thead>
           <tr>
-            <th class="ps-4">Nombre</th>
+            <th>Nombre</th>
             <th>Identificación</th>
             <th>Email</th>
             <th>Estado</th>
-            <th class="text-end pe-4">Acciones</th>
+            <th class="text-end">Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let customer of filteredCustomers">
-            <td class="fw-bold ps-4">{{customer.name}}</td>
+            <td class="fw-bold">{{customer.name}}</td>
             <td>{{customer.identification}}</td>
             <td>{{customer.email}}</td>
             <td>
-              <span class="status-badge" [ngClass]="customer.status ? 'status-active' : 'status-inactive'">
-                {{customer.status ? 'Activo' : 'Inactivo'}}
+              <span class="status-indicator" [ngClass]="customer.status ? 'status-active' : 'status-inactive'" [title]="customer.status ? 'Activo' : 'Inactivo'">
+                •
               </span>
             </td>
-            <td class="text-end pe-4">
+            <td class="text-end">
               <div class="d-flex justify-content-end gap-2">
-                <button class="btn btn-secondary btn-sm" (click)="goToDetail(customer.id)">
-                  <span class="material-icons" style="font-size: 16px;">visibility</span>
-                </button>
-                <button class="btn btn-danger btn-sm" (click)="confirmDelete(customer.id)">
-                  <span class="material-icons" style="font-size: 16px;">delete</span>
-                </button>
+                <button class="btn btn-secondary btn-sm" (click)="goToDetail(customer.id)">Ver</button>
+                <button class="btn btn-danger btn-sm" (click)="confirmDelete(customer.id)">Eliminar</button>
               </div>
             </td>
           </tr>
@@ -90,21 +82,21 @@
         <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.2"/>
           <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.2"/>
-          <path d="M23 21V19C22.9993 18.1137 22.7044 17.2524 22.1614 16.5523C21.6184 15.8522 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-color, #005ce6)"/>
-          <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89317 18.7122 8.75608 18.1676 9.45768C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-color, #005ce6)"/>
+          <path d="M23 21V19C22.9993 18.1137 22.7044 17.2524 22.1614 16.5523C21.6184 15.8522 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-color, #f0b90b)"/>
+          <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89317 18.7122 8.75608 18.1676 9.45768C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-color, #f0b90b)"/>
         </svg>
       </div>
       <h3>No se encontraron clientes</h3>
-      <p>Crea un nuevo cliente para comenzar a gestionar sus cuentas y movimientos.</p>
+      <p>Intenta ajustar tu búsqueda o crea un nuevo cliente para comenzar a gestionar tus usuarios.</p>
     </div>
-  </div>
+  </section>
 </div>
 
-<!-- Delete Modal -->
+<!-- Modal de Eliminación - Estilo Surface -->
 <div *ngIf="showDeleteModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px);">
   <div class="surface mx-3" style="width: 100%; max-width: 400px;">
     <h3 class="h5 mb-3">Eliminar cliente</h3>
-    <p class="text-secondary mb-4">¿Estás seguro de que deseas eliminar este cliente? Esta acción no se puede deshacer si tiene datos vinculados.</p>
+    <p class="text-secondary mb-4">¿Estás seguro de que deseas eliminar este cliente permanentemente?</p>
     <div class="d-flex justify-content-end gap-2">
       <button class="btn btn-secondary" (click)="showDeleteModal = false">Cancelar</button>
       <button class="btn btn-danger" (click)="onDelete()">Eliminar</button>
