@@ -28,8 +28,9 @@
         </button>
       </div>
 
-      <div *ngIf="loading()" class="text-center py-5">
-        <p class="text-secondary">Cargando clientes...</p>
+      <div *ngIf="loading()" class="spinner-container py-5">
+        <div class="spinner"></div>
+        <p class="loading-text mb-0">Cargando clientes...</p>
       </div>
 
       <!-- Vista de Móvil: Lista minimalista -->
