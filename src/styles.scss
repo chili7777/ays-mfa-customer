@@ -16,6 +16,13 @@ html, body {
   height: 100%;
   width: 100%;
 
+  /* Variables globales para uso en HTML/SVG */
+  --accent-color: #{$theme-dark-accent};
+  --warning-color: #{$theme-dark-warning};
+  --success-color: #{$theme-dark-success};
+  --error-color: #{$theme-dark-error};
+  --text-secondary: #{$theme-dark-text-secondary};
+
   /* Ocultar barra de desplazamiento */
   scrollbar-width: none;
   -ms-overflow-style: none;
