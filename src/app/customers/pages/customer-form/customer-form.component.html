@@ -28,8 +28,12 @@
         <!-- Step 1: Personal Info -->
         <div *ngIf="currentStep === 1" class="step-content animate-fade-in">
           <div class="mb-4">
-            <label class="text-secondary small d-block mb-2">Nombre Completo</label>
-            <input type="text" formControlName="name" class="form-control" [class.is-invalid]="f['name'].invalid && f['name'].touched" placeholder="Ej: Juan Pérez">
+            <label class="text-secondary small d-flex align-items-center gap-1 mb-2">
+              Nombre Completo
+              <span class="material-icons animate-fade-in" *ngIf="f['name'].valid && f['name'].touched" style="font-size: 14px; color: var(--success-color);">check_circle</span>
+              <span class="material-icons animate-fade-in" *ngIf="f['name'].invalid && f['name'].touched" style="font-size: 14px; color: var(--error-color);">error</span>
+            </label>
+            <input type="text" formControlName="name" class="form-control" [class.is-invalid]="f['name'].invalid && f['name'].touched" [class.is-valid]="f['name'].valid && f['name'].touched" placeholder="Ej: Juan Pérez">
             <div class="invalid-feedback animate-fade-in" *ngIf="f['name'].errors?.['required'] && f['name'].touched">
               Nombre es requerido
             </div>
@@ -39,8 +43,12 @@
           </div>
 
           <div class="mb-4">
-            <label class="text-secondary small d-block mb-2">Identificación (Cédula/RUC)</label>
-            <input type="text" formControlName="identification" class="form-control" [class.is-invalid]="f['identification'].invalid && f['identification'].touched" placeholder="Ej: 1712345678">
+            <label class="text-secondary small d-flex align-items-center gap-1 mb-2">
+              Identificación (Cédula/RUC)
+              <span class="material-icons animate-fade-in" *ngIf="f['identification'].valid && f['identification'].touched" style="font-size: 14px; color: var(--success-color);">check_circle</span>
+              <span class="material-icons animate-fade-in" *ngIf="f['identification'].invalid && f['identification'].touched" style="font-size: 14px; color: var(--error-color);">error</span>
+            </label>
+            <input type="text" formControlName="identification" class="form-control" [class.is-invalid]="f['identification'].invalid && f['identification'].touched" [class.is-valid]="f['identification'].valid && f['identification'].touched" placeholder="Ej: 1712345678">
             <div class="invalid-feedback animate-fade-in" *ngIf="f['identification'].errors?.['required'] && f['identification'].touched">
               Identificación es requerida
             </div>
@@ -51,16 +59,23 @@
 
           <div class="row">
             <div class="col-6 mb-4">
-              <label class="text-secondary small d-block mb-2">Género</label>
-              <select formControlName="gender" class="form-control" [class.is-invalid]="f['gender'].invalid && f['gender'].touched">
+              <label class="text-secondary small d-flex align-items-center gap-1 mb-2">
+                Género
+                <span class="material-icons animate-fade-in" *ngIf="f['gender'].valid && f['gender'].touched" style="font-size: 14px; color: var(--success-color);">check_circle</span>
+              </label>
+              <select formControlName="gender" class="form-control" [class.is-invalid]="f['gender'].invalid && f['gender'].touched" [class.is-valid]="f['gender'].valid && f['gender'].touched">
                 <option value="MALE">Masculino</option>
                 <option value="FEMALE">Femenino</option>
                 <option value="OTHER">Otro</option>
               </select>
             </div>
             <div class="col-6 mb-4">
-              <label class="text-secondary small d-block mb-2">Edad</label>
-            <input type="number" formControlName="age" class="form-control" [class.is-invalid]="f['age'].invalid && f['age'].touched" placeholder="18">
+              <label class="text-secondary small d-flex align-items-center gap-1 mb-2">
+                Edad
+                <span class="material-icons animate-fade-in" *ngIf="f['age'].valid && f['age'].touched" style="font-size: 14px; color: var(--success-color);">check_circle</span>
+                <span class="material-icons animate-fade-in" *ngIf="f['age'].invalid && f['age'].touched" style="font-size: 14px; color: var(--error-color);">error</span>
+              </label>
+            <input type="number" formControlName="age" class="form-control" [class.is-invalid]="f['age'].invalid && f['age'].touched" [class.is-valid]="f['age'].valid && f['age'].touched" placeholder="18">
             <div class="invalid-feedback animate-fade-in" *ngIf="f['age'].errors?.['required'] && f['age'].touched">
               Edad es requerida
             </div>
@@ -74,8 +89,12 @@
         <!-- Step 2: Contact Info -->
         <div *ngIf="currentStep === 2" class="step-content animate-fade-in">
           <div class="mb-4">
-            <label class="text-secondary small d-block mb-2">Correo Electrónico</label>
-            <input type="email" formControlName="email" class="form-control" [class.is-invalid]="f['email'].invalid && f['email'].touched" placeholder="juan.perez@example.com">
+            <label class="text-secondary small d-flex align-items-center gap-1 mb-2">
+              Correo Electrónico
+              <span class="material-icons animate-fade-in" *ngIf="f['email'].valid && f['email'].touched" style="font-size: 14px; color: var(--success-color);">check_circle</span>
+              <span class="material-icons animate-fade-in" *ngIf="f['email'].invalid && f['email'].touched" style="font-size: 14px; color: var(--error-color);">error</span>
+            </label>
+            <input type="email" formControlName="email" class="form-control" [class.is-invalid]="f['email'].invalid && f['email'].touched" [class.is-valid]="f['email'].valid && f['email'].touched" placeholder="juan.perez@example.com">
             <div class="invalid-feedback animate-fade-in" *ngIf="f['email'].errors?.['required'] && f['email'].touched">
               Email es requerido
             </div>
@@ -85,8 +104,12 @@
           </div>
 
           <div class="mb-4">
-            <label class="text-secondary small d-block mb-2">Teléfono de Contacto</label>
-            <input type="text" formControlName="phone" class="form-control" [class.is-invalid]="f['phone'].invalid && f['phone'].touched" placeholder="0987654321">
+            <label class="text-secondary small d-flex align-items-center gap-1 mb-2">
+              Teléfono de Contacto
+              <span class="material-icons animate-fade-in" *ngIf="f['phone'].valid && f['phone'].touched" style="font-size: 14px; color: var(--success-color);">check_circle</span>
+              <span class="material-icons animate-fade-in" *ngIf="f['phone'].invalid && f['phone'].touched" style="font-size: 14px; color: var(--error-color);">error</span>
+            </label>
+            <input type="text" formControlName="phone" class="form-control" [class.is-invalid]="f['phone'].invalid && f['phone'].touched" [class.is-valid]="f['phone'].valid && f['phone'].touched" placeholder="0987654321">
             <div class="invalid-feedback animate-fade-in" *ngIf="f['phone'].errors?.['required'] && f['phone'].touched">
               Teléfono es requerido
             </div>
@@ -96,8 +119,12 @@
           </div>
 
           <div class="mb-4">
-            <label class="text-secondary small d-block mb-2">Dirección de Domicilio</label>
-            <input type="text" formControlName="address" class="form-control" [class.is-invalid]="f['address'].invalid && f['address'].touched" placeholder="Quito, Ecuador">
+            <label class="text-secondary small d-flex align-items-center gap-1 mb-2">
+              Dirección de Domicilio
+              <span class="material-icons animate-fade-in" *ngIf="f['address'].valid && f['address'].touched" style="font-size: 14px; color: var(--success-color);">check_circle</span>
+              <span class="material-icons animate-fade-in" *ngIf="f['address'].invalid && f['address'].touched" style="font-size: 14px; color: var(--error-color);">error</span>
+            </label>
+            <input type="text" formControlName="address" class="form-control" [class.is-invalid]="f['address'].invalid && f['address'].touched" [class.is-valid]="f['address'].valid && f['address'].touched" placeholder="Quito, Ecuador">
             <div class="invalid-feedback animate-fade-in" *ngIf="f['address'].errors?.['required'] && f['address'].touched">
               Dirección es requerida
             </div>
@@ -110,8 +137,12 @@
         <!-- Step 3: Security & Status -->
         <div *ngIf="currentStep === 3" class="step-content animate-fade-in">
           <div class="mb-4">
-            <label class="text-secondary small d-block mb-2">Contraseña de acceso</label>
-            <input type="password" formControlName="password" class="form-control" [class.is-invalid]="f['password'].invalid && f['password'].touched" placeholder="Mínimo 6 caracteres">
+            <label class="text-secondary small d-flex align-items-center gap-1 mb-2">
+              Contraseña de acceso
+              <span class="material-icons animate-fade-in" *ngIf="f['password'].valid && f['password'].touched" style="font-size: 14px; color: var(--success-color);">check_circle</span>
+              <span class="material-icons animate-fade-in" *ngIf="f['password'].invalid && f['password'].touched" style="font-size: 14px; color: var(--error-color);">error</span>
+            </label>
+            <input type="password" formControlName="password" class="form-control" [class.is-invalid]="f['password'].invalid && f['password'].touched" [class.is-valid]="f['password'].valid && f['password'].touched" placeholder="Mínimo 6 caracteres">
             <div class="invalid-feedback animate-fade-in" *ngIf="f['password'].errors?.['required'] && f['password'].touched">
               Contraseña es requerida
             </div>
