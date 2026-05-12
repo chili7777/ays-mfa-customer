@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://ays-mfa-customer-gokba.ondigitalocean.app",
+    "target": "https://ays-msa-dm-cuaa-cr-account-stagi-zdpms.ondigitalocean.app",
     "secure": true,
     "changeOrigin": true,
     "pathRewrite": {

@@ -1,11 +1,15 @@
-<div class="container py-5 d-flex flex-column justify-content-center align-items-center" style="min-height: 100vh;">
-  <div class="w-100" style="max-width: 480px;">
-    <header class="mb-5 text-center">
-      <h1 class="h2 mb-2">{{isEdit ? 'Actualizar Información' : 'Nuevo Cliente'}}</h1>
-      <p class="text-secondary">
+<div class="container py-4 d-flex justify-content-center align-items-start" style="min-height: 90vh;">
+  <div class="w-100 animate-fade-in" style="max-width: 500px;">
+    <header class="mb-5 text-center mt-4">
+      <div class="d-inline-flex p-3 rounded-circle mb-3" style="background: rgba(0, 92, 230, 0.1); color: #005ce6;">
+        <span class="material-icons" style="font-size: 32px;">person_add</span>
+      </div>
+      <h1 class="h3 mb-2 fw-bold">{{isEdit ? 'Actualizar Información' : 'Registro de Cliente'}}</h1>
+      <p class="text-secondary px-4">
         {{
-          currentStep === 1 ? 'Paso 1: Información Personal' :
-          currentStep === 2 ? 'Paso 2: Contacto y Ubicación' : 'Paso 3: Seguridad y Estado'
+          currentStep === 1 ? 'Cuéntanos un poco sobre el nuevo cliente para empezar.' :
+          currentStep === 2 ? '¿Cómo podemos contactar con el cliente? Agrega sus datos.' :
+          'Por seguridad, establece una contraseña y define el estado inicial.'
         }}
       </p>
 
@@ -19,24 +23,24 @@
       </div>
     </header>
 
-    <div class="surface p-4">
+    <div class="surface p-4 shadow-sm">
       <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
 
         <!-- Step 1: Personal Info -->
         <div *ngIf="currentStep === 1" class="step-content animate-fade-in">
           <div class="mb-4">
-            <label class="form-label">Nombre Completo</label>
+            <label class="text-secondary small d-block mb-2">Nombre Completo</label>
             <input type="text" formControlName="name" class="form-control" placeholder="Ej: Juan Pérez">
           </div>
 
           <div class="mb-4">
-            <label class="form-label">Identificación</label>
+            <label class="text-secondary small d-block mb-2">Identificación (Cédula/RUC)</label>
             <input type="text" formControlName="identification" class="form-control" placeholder="Ej: 1712345678">
           </div>
 
           <div class="row">
             <div class="col-6 mb-4">
-              <label class="form-label">Género</label>
+              <label class="text-secondary small d-block mb-2">Género</label>
               <select formControlName="gender" class="form-control">
                 <option value="MALE">Masculino</option>
                 <option value="FEMALE">Femenino</option>
@@ -44,7 +48,7 @@
               </select>
             </div>
             <div class="col-6 mb-4">
-              <label class="form-label">Edad</label>
+              <label class="text-secondary small d-block mb-2">Edad</label>
               <input type="number" formControlName="age" class="form-control" placeholder="18">
             </div>
           </div>
@@ -53,17 +57,17 @@
         <!-- Step 2: Contact Info -->
         <div *ngIf="currentStep === 2" class="step-content animate-fade-in">
           <div class="mb-4">
-            <label class="form-label">Email Corporativo / Personal</label>
+            <label class="text-secondary small d-block mb-2">Correo Electrónico</label>
             <input type="email" formControlName="email" class="form-control" placeholder="juan.perez@example.com">
           </div>
 
           <div class="mb-4">
-            <label class="form-label">Teléfono de Contacto</label>
+            <label class="text-secondary small d-block mb-2">Teléfono de Contacto</label>
             <input type="text" formControlName="phone" class="form-control" placeholder="0987654321">
           </div>
 
           <div class="mb-4">
-            <label class="form-label">Dirección Domiciliaria</label>
+            <label class="text-secondary small d-block mb-2">Dirección de Domicilio</label>
             <input type="text" formControlName="address" class="form-control" placeholder="Quito, Ecuador">
           </div>
         </div>
@@ -71,14 +75,14 @@
         <!-- Step 3: Security & Status -->
         <div *ngIf="currentStep === 3" class="step-content animate-fade-in">
           <div class="mb-4" *ngIf="!isEdit">
-            <label class="form-label">Contraseña de acceso</label>
+            <label class="text-secondary small d-block mb-2">Contraseña de acceso</label>
             <input type="password" formControlName="password" class="form-control" placeholder="Mínimo 6 caracteres">
           </div>
 
-          <div class="mb-4 d-flex align-items-center justify-content-between py-3 surface-alt px-3">
+          <div class="mb-4 d-flex align-items-center justify-content-between py-3 surface-alt px-3 rounded">
             <div>
-              <label for="status" class="form-label mb-0">Cliente Activo</label>
-              <span class="text-secondary small">Permitir operaciones en el sistema</span>
+              <label for="status" class="fw-medium d-block mb-0">Estado Activo</label>
+              <span class="text-secondary small">Habilitar acceso inmediato</span>
             </div>
             <label class="switch">
               <input type="checkbox" id="status" formControlName="status">
@@ -89,16 +93,16 @@
 
         <!-- Navigation -->
         <div class="mt-5 d-flex gap-3">
-          <button type="button" class="btn btn-secondary w-100" (click)="currentStep === 1 ? goBack() : prevStep()">
+          <button type="button" class="btn btn-secondary flex-grow-1" (click)="currentStep === 1 ? goBack() : prevStep()">
             {{currentStep === 1 ? 'Cancelar' : 'Anterior'}}
           </button>
 
-          <button *ngIf="currentStep < totalSteps" type="button" class="btn btn-primary w-100" (click)="nextStep()">
+          <button *ngIf="currentStep < totalSteps" type="button" class="btn btn-primary flex-grow-1" (click)="nextStep()">
             Siguiente
           </button>
 
-          <button *ngIf="currentStep === totalSteps" type="submit" class="btn w-100" [ngClass]="isEdit ? 'btn-warning' : 'btn-success'" [disabled]="customerForm.invalid">
-            {{isEdit ? 'Guardar Cambios' : 'Finalizar Registro'}}
+          <button *ngIf="currentStep === totalSteps" type="submit" class="btn flex-grow-1" [ngClass]="isEdit ? 'btn-warning' : 'btn-success'" [disabled]="customerForm.invalid">
+            {{isEdit ? 'Guardar Cambios' : 'Confirmar Registro'}}
           </button>
         </div>
       </form>
