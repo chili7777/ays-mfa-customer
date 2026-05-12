@@ -17,7 +17,7 @@
         <div class="d-flex justify-content-center align-items-center gap-3 animate-fade-in mb-2">
           <span [class]="c.status ? 'status-dot active' : 'status-dot'"></span>
           <span class="fw-medium small" [style.color]="c.status ? '#00c076' : '#d41020'">
-            {{ c.status ? 'Cuenta Activa' : 'Cuenta Inactiva' }}
+            {{ c.status ? 'Cliente Activo' : 'Cliente Inactivo' }}
           </span>
           <label class="switch" style="transform: scale(0.8);" [title]="c.status ? 'Desactivar cuenta' : 'Activar cuenta'">
             <input type="checkbox" [checked]="c.status" (change)="toggleStatus()">
