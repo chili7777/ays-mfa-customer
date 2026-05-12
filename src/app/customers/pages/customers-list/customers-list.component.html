@@ -1,0 +1,99 @@
+<div class="container">
+  <section class="search-section py-4">
+    <div class="d-flex gap-2">
+      <div class="position-relative w-100">
+        <span class="material-icons position-absolute top-50 translate-middle-y ms-3 text-secondary" style="font-size: 18px;">search</span>
+        <input
+          type="text"
+          class="form-control ps-5"
+          placeholder="Buscar cliente por nombre, identificación o email..."
+          [(ngModel)]="searchTerm"
+          (keyup.enter)="onSearch()"
+        >
+      </div>
+      <button class="btn btn-primary" type="button" (click)="onSearch()">
+        Buscar
+      </button>
+    </div>
+  </section>
+
+  <section class="list-section">
+    <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+      <h2 class="h5 mb-0">Clientes</h2>
+      <button class="btn btn-success btn-sm" (click)="goToCreate()">
+        + Nuevo Cliente
+      </button>
+    </div>
+
+    <!-- Mobile View -->
+    <div class="show-mobile-only">
+      <div class="px-3" *ngFor="let customer of filteredCustomers" (click)="goToDetail(customer.id)">
+        <div class="py-3 d-flex justify-content-between align-items-center" style="border-bottom: 1px solid var(--border-color, rgba(43, 49, 57, 0.5));">
+          <div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="fw-bold">{{customer.name}}</span>
+              <span class="status-badge" [ngClass]="customer.status ? 'status-active' : 'status-inactive'">
+                •
+              </span>
+            </div>
+            <div class="text-secondary small">{{customer.identification}} | {{customer.email}}</div>
+          </div>
+          <span class="text-secondary">›</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop View -->
+    <div class="hide-mobile">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Identificación</th>
+            <th>Email</th>
+            <th>Estado</th>
+            <th style="text-align: right;">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let customer of filteredCustomers">
+            <td class="fw-bold">{{customer.name}}</td>
+            <td>{{customer.identification}}</td>
+            <td>{{customer.email}}</td>
+            <td>
+              <span class="status-badge" [ngClass]="customer.status ? 'status-active' : 'status-inactive'">
+                {{customer.status ? 'Activo' : 'Inactivo'}}
+              </span>
+            </td>
+            <td style="text-align: right;">
+              <div class="d-flex justify-content-end gap-2">
+                <button class="btn btn-secondary btn-sm" (click)="goToDetail(customer.id)">Ver</button>
+                <button class="btn btn-danger btn-sm" (click)="confirmDelete(customer.id)">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="filteredCustomers.length === 0" class="empty-state">
+      <div class="empty-icon-container">
+        <span class="material-icons">group_off</span>
+      </div>
+      <h3>No se encontraron clientes</h3>
+      <p>Crea un nuevo cliente para comenzar a gestionar sus cuentas y movimientos.</p>
+    </div>
+  </section>
+</div>
+
+<!-- Delete Modal -->
+<div *ngIf="showDeleteModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px);">
+  <div class="surface mx-3" style="width: 100%; max-width: 400px;">
+    <h3 class="h5 mb-3">Eliminar cliente</h3>
+    <p class="text-secondary mb-4">¿Estás seguro de que deseas eliminar este cliente? Esta acción no se puede deshacer si tiene datos vinculados.</p>
+    <div class="d-flex justify-content-end gap-2">
+      <button class="btn btn-secondary" (click)="showDeleteModal = false">Cancelar</button>
+      <button class="btn btn-danger" (click)="onDelete()">Eliminar</button>
+    </div>
+  </div>
+</div>
