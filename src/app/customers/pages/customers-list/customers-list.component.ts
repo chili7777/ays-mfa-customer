@@ -89,4 +89,19 @@ export class CustomersListComponent implements OnInit {
       });
     }
   }
+
+  toggleStatus(customer: Customer): void {
+    const newStatus = !customer.status;
+    this.customerService.updateCustomerStatus(customer.id, newStatus).subscribe({
+      next: () => {
+        this.customers.update(prev =>
+          prev.map(c => c.id === customer.id ? { ...c, status: newStatus } : c)
+        );
+      },
+      error: (err) => {
+        console.error('Error al actualizar estado', err);
+        alert('No se pudo actualizar el estado del cliente.');
+      }
+    });
+  }
 }

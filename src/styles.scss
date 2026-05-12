@@ -324,6 +324,21 @@ input:checked + .slider:before {
   filter: brightness(1.2);
 }
 
+/* Punto de estado simple */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  background-color: #d41020;
+  transition: all 0.3s ease;
+}
+
+.status-dot.active {
+  background-color: #00c076;
+  box-shadow: 0 0 8px #00c076;
+}
+
 .form-control::placeholder {
   color: $theme-dark-text-secondary;
   opacity: 0.6;
