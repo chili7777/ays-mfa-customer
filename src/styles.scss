@@ -52,6 +52,13 @@ h1, h2, h3, h4, h5, h6 {
   margin-right: auto;
   margin-left: auto;
   padding: 0 16px;
+  max-width: 100%;
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
 }
 
 /* Cards & Surfaces - Minimalist (No shadows, fine borders) */
@@ -363,6 +370,7 @@ input:checked + .slider:before {
 .pb-3 { padding-bottom: 1rem !important; }
 .mx-2 { margin-left: 0.5rem !important; margin-right: 0.5rem !important; }
 .mx-3 { margin-left: 1rem !important; margin-right: 1rem !important; }
+.mx-auto { margin-left: auto !important; margin-right: auto !important; }
 .fw-bold { font-weight: 700 !important; }
 .fw-medium { font-weight: 500 !important; }
 .small { font-size: 0.875rem !important; }
@@ -442,7 +450,7 @@ input:checked + .slider:before {
 @media (max-width: 767.98px) {
   .hide-mobile { display: none !important; }
   .container { padding: 0 16px; }
-  .surface { border-radius: 0; margin-left: -16px; margin-right: -16px; }
+  .surface, .surface-alt { border-radius: 0; margin-left: -16px; margin-right: -16px; }
 }
 
 @media (min-width: 768px) {
