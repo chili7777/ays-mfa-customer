@@ -160,8 +160,14 @@
     <h3 class="h5 mb-3">Eliminar cliente</h3>
     <p class="text-secondary mb-4">¿Estás seguro de que deseas eliminar este cliente permanentemente?</p>
     <div class="d-flex justify-content-end gap-2">
-      <button class="btn btn-secondary" (click)="showDeleteModal.set(false)">Cancelar</button>
-      <button class="btn btn-danger" (click)="onDelete()">Eliminar</button>
+      <button class="btn btn-secondary" (click)="showDeleteModal.set(false)">
+        <span class="material-icons d-lg-none" style="font-size: 18px;">close</span>
+        <span class="d-none d-lg-inline">Cancelar</span>
+      </button>
+      <button class="btn btn-danger" (click)="onDelete()">
+        <span class="material-icons d-lg-none" style="font-size: 18px;">delete</span>
+        <span class="d-none d-lg-inline">Eliminar</span>
+      </button>
     </div>
   </div>
 </div>

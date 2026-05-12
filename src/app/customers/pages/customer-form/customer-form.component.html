@@ -1,6 +1,9 @@
 <div class="container py-4 d-flex justify-content-center align-items-center" style="min-height: 90vh;">
   <div class="w-100 animate-fade-in" style="max-width: 500px;">
-    <header class="mb-5 text-center mt-4">
+    <header class="mb-5 text-center mt-4 position-relative">
+      <button class="btn btn-icon position-absolute" (click)="goBack()" title="Volver" style="left: 0; top: 0;">
+        <span class="material-icons">arrow_back</span>
+      </button>
       <div class="d-inline-flex p-3 rounded-circle mb-3" style="color: var(--accent-color);">
         <span class="material-icons" style="font-size: 32px;">person_add</span>
       </div>

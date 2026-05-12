@@ -1,19 +1,10 @@
 <div class="container py-4 d-flex justify-content-center align-items-center" style="min-height: 90vh;">
   <div class="w-100 animate-fade-in position-relative" style="max-width: 500px;">
 
-    <!-- Botón Volver - Escritorio (Posición absoluta lateral) -->
-    <button class="btn btn-icon position-absolute d-none d-lg-block" style="top: 1.5rem; left: -3rem;" (click)="goBack()" title="Volver">
-      <span class="material-icons">arrow_back</span>
-    </button>
-
-    <!-- Botón Volver - Móvil/Tablet (Dentro del flujo) -->
-    <div class="d-lg-none mb-3">
-      <button class="btn btn-icon" (click)="goBack()" title="Volver">
+    <header class="mb-5 text-center mt-4 position-relative">
+      <button class="btn btn-icon position-absolute" (click)="goBack()" title="Volver" style="left: 0; top: 0;">
         <span class="material-icons">arrow_back</span>
       </button>
-    </div>
-
-    <header class="mb-5 text-center mt-4">
       <div class="d-inline-flex p-3 rounded-circle mb-3" style="color: var(--accent-color);">
         <span class="material-icons" style="font-size: 32px;">person</span>
       </div>
@@ -58,7 +49,8 @@
         <h3 class="text-danger h5 mb-2">Error de Conexión</h3>
         <p class="text-secondary small mb-4">{{errorMessage()}}</p>
         <button class="btn btn-secondary w-100" (click)="goBack()">
-          Volver al listado
+          <span class="material-icons d-lg-none" style="font-size: 18px;">arrow_back</span>
+          <span class="d-none d-lg-inline">Volver al listado</span>
         </button>
       </div>
     } @else if (customer(); as c) {
@@ -141,8 +133,14 @@
     </div>
 
     <div class="d-flex gap-3">
-      <button class="btn btn-secondary flex-grow-1" (click)="showDeleteModal.set(false)">Cancelar</button>
-      <button class="btn btn-danger flex-grow-1" (click)="onDelete()">Eliminar</button>
+      <button class="btn btn-secondary flex-grow-1" (click)="showDeleteModal.set(false)">
+        <span class="material-icons d-lg-none" style="font-size: 18px;">close</span>
+        <span class="d-none d-lg-inline">Cancelar</span>
+      </button>
+      <button class="btn btn-danger flex-grow-1" (click)="onDelete()">
+        <span class="material-icons d-lg-none" style="font-size: 18px;">delete</span>
+        <span class="d-none d-lg-inline">Eliminar</span>
+      </button>
     </div>
   </div>
 </div>
