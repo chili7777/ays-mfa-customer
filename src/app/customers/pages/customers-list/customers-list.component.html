@@ -15,7 +15,8 @@
           >
         </div>
         <button class="btn btn-primary" type="button" (click)="onSearch()">
-          Buscar
+          <span class="material-icons d-md-none">search</span>
+          <span class="d-none d-md-inline">Buscar</span>
         </button>
       </div>
     </section>
@@ -24,7 +25,8 @@
       <div class="d-flex justify-content-between align-items-center mb-4 px-2">
         <h2 class="h5 mb-0">Clientes</h2>
         <button class="btn btn-success btn-sm" (click)="goToCreate()">
-          + Nuevo
+          <span class="material-icons d-md-none" style="font-size: 18px;">add</span>
+          <span class="d-none d-md-inline">+ Nuevo</span>
         </button>
       </div>
 
@@ -76,17 +78,20 @@
               <td>{{customer.email}}</td>
               <td class="text-secondary">{{customer.phone}}</td>
               <td class="text-center">
-                <span class="status-indicator" [ngClass]="customer.status ? 'status-active' : 'status-inactive'" [title]="customer.status ? 'Activo' : 'Inactivo'">
-                  •
-                </span>
+                <label class="switch" (click)="$event.stopPropagation()" [title]="customer.status ? 'Activo' : 'Inactivo'">
+                  <input type="checkbox" [checked]="customer.status" (change)="toggleStatus(customer)">
+                  <span class="slider"></span>
+                </label>
               </td>
               <td class="text-end">
-                <div class="d-flex justify-content-end gap-1">
-                  <button class="btn-icon text-warning" (click)="$event.stopPropagation(); goToEdit(customer.id)" title="Editar">
-                    <span class="material-icons" style="font-size: 20px;">edit</span>
+                <div class="d-flex justify-content-end gap-2">
+                  <button class="btn btn-warning btn-sm align-items-center gap-1" (click)="$event.stopPropagation(); goToEdit(customer.id)" title="Editar">
+                    <span class="material-icons" style="font-size: 16px;">edit</span>
+                    <span class="d-none d-md-inline">Editar</span>
                   </button>
-                  <button class="btn-icon text-danger" (click)="$event.stopPropagation(); confirmDelete(customer.id)" title="Eliminar">
-                    <span class="material-icons" style="font-size: 20px;">delete</span>
+                  <button class="btn btn-danger btn-sm align-items-center gap-1" (click)="$event.stopPropagation(); confirmDelete(customer.id)" title="Eliminar">
+                    <span class="material-icons" style="font-size: 16px;">delete</span>
+                    <span class="d-none d-md-inline">Eliminar</span>
                   </button>
                 </div>
               </td>

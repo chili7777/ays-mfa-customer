@@ -402,6 +402,14 @@ input:checked + .slider:before {
 .overflow-hidden { overflow: hidden !important; }
 .border-bottom { border-bottom: 1px solid $theme-dark-border !important; }
 
+/* Responsive Display Utilities */
+.d-none { display: none !important; }
+@media (min-width: 768px) {
+  .d-md-inline { display: inline !important; }
+  .d-md-block { display: block !important; }
+  .d-md-flex { display: flex !important; }
+}
+
 .btn-icon {
   background: transparent;
   border: none;

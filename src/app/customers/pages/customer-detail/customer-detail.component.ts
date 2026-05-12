@@ -51,6 +51,22 @@ export class CustomerDetailComponent implements OnInit {
     }
   }
 
+  toggleStatus(): void {
+    const current = this.customer();
+    if (current) {
+      const newStatus = !current.status;
+      this.customerService.patchCustomer({ status: newStatus }, current.id).subscribe({
+        next: () => {
+          this.customer.update(prev => prev ? { ...prev, status: newStatus } : null);
+        },
+        error: (err) => {
+          console.error('Error al actualizar estado', err);
+          alert('No se pudo actualizar el estado del cliente.');
+        }
+      });
+    }
+  }
+
   onDelete(): void {
     const current = this.customer();
     if (current) {

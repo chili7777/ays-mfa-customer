@@ -76,9 +76,10 @@
             <label class="fw-medium d-block mb-0">Estado de Cuenta</label>
             <span class="text-secondary small">{{c.status ? 'Activo' : 'Inactivo'}}</span>
           </div>
-          <span class="status-indicator" [ngClass]="c.status ? 'status-active' : 'status-inactive'">
-            •
-          </span>
+          <label class="switch">
+            <input type="checkbox" [checked]="c.status" (change)="toggleStatus()">
+            <span class="slider"></span>
+          </label>
         </div>
 
         <div class="mt-5 d-flex gap-3">
