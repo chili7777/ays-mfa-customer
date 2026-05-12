@@ -339,6 +339,14 @@ input:checked + .slider:before {
   box-shadow: 0 0 8px #00c076;
 }
 
+/* Emojis Grisáceos para Tablet/Escritorio */
+.grayscale-emoji {
+  filter: grayscale(100%);
+  opacity: 0.6;
+  display: inline-block;
+  margin-right: 4px;
+}
+
 .form-control::placeholder {
   color: $theme-dark-text-secondary;
   opacity: 0.6;
