@@ -93,15 +93,18 @@
         <!-- Navigation -->
         <div class="mt-5 d-flex gap-3">
           <button type="button" class="btn btn-secondary flex-grow-1" (click)="currentStep === 1 ? goBack() : prevStep()">
-            {{currentStep === 1 ? 'Cancelar' : 'Anterior'}}
+            <span class="material-icons d-md-none" style="font-size: 18px;">{{currentStep === 1 ? 'close' : 'arrow_back'}}</span>
+            <span class="d-none d-md-inline">{{currentStep === 1 ? 'Cancelar' : 'Anterior'}}</span>
           </button>
 
           <button *ngIf="currentStep < totalSteps" type="button" class="btn btn-primary flex-grow-1" (click)="nextStep()">
-            Siguiente
+            <span class="material-icons d-md-none" style="font-size: 18px;">arrow_forward</span>
+            <span class="d-none d-md-inline">Siguiente</span>
           </button>
 
           <button *ngIf="currentStep === totalSteps" type="submit" class="btn flex-grow-1" [ngClass]="isEdit ? 'btn-warning' : 'btn-success'" [disabled]="customerForm.invalid">
-            {{isEdit ? 'Guardar Cambios' : 'Confirmar Registro'}}
+            <span class="material-icons d-md-none" style="font-size: 18px;">{{isEdit ? 'save' : 'check'}}</span>
+            <span class="d-none d-md-inline">{{isEdit ? 'Guardar Cambios' : 'Confirmar Registro'}}</span>
           </button>
         </div>
       </form>

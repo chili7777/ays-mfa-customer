@@ -82,7 +82,7 @@
               </span>
             </div>
             <div>
-              <label class="fw-bold d-block mb-0" style="font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary);">
+              <label class="fw-bold d-none d-md-block mb-0" style="font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary);">
                 Estado de la Cuenta
               </label>
               <span class="fw-medium" [style.color]="c.status ? '#00c076' : '#d41020'">
@@ -99,15 +99,15 @@
         <div class="mt-5 d-flex gap-3">
           <button class="btn btn-secondary flex-grow-1" (click)="goBack()" title="Volver">
             <span class="material-icons" style="font-size: 18px;">arrow_back</span>
-            Listado
+            <span class="d-none d-md-inline">Listado</span>
           </button>
           <button class="btn btn-warning flex-grow-1" (click)="goToEdit()">
             <span class="material-icons" style="font-size: 18px;">edit</span>
-            Editar
+            <span class="d-none d-md-inline">Editar</span>
           </button>
           <button class="btn btn-danger flex-grow-1" (click)="showDeleteModal.set(true)">
             <span class="material-icons" style="font-size: 18px;">delete</span>
-            Eliminar
+            <span class="d-none d-md-inline">Eliminar</span>
           </button>
         </div>
       </div>
