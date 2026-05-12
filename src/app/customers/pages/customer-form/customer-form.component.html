@@ -1,20 +1,20 @@
-<div class="container py-4 d-flex justify-content-center">
-  <div class="w-100" style="max-width: 600px;">
+<div class="container py-5 d-flex flex-column justify-content-center align-items-center" style="min-height: 100vh;">
+  <div class="w-100" style="max-width: 480px;">
     <header class="mb-5 text-center">
-      <h1 class="h3 mb-2">{{isEdit ? 'Actualizar Información' : 'Nuevo Registro de Cliente'}}</h1>
-      <p class="text-secondary small">Paso {{currentStep}} de {{totalSteps}}: {{
-        currentStep === 1 ? 'Información Personal' :
-        currentStep === 2 ? 'Contacto y Ubicación' : 'Seguridad y Estado'
-      }}</p>
+      <h1 class="h2 mb-2">{{isEdit ? 'Actualizar Información' : 'Nuevo Cliente'}}</h1>
+      <p class="text-secondary">
+        {{
+          currentStep === 1 ? 'Paso 1: Información Personal' :
+          currentStep === 2 ? 'Paso 2: Contacto y Ubicación' : 'Paso 3: Seguridad y Estado'
+        }}
+      </p>
 
-      <!-- Progress Bar -->
-      <div class="d-flex gap-1 mt-3 justify-content-center">
+      <!-- Progress Indicators -->
+      <div class="d-flex gap-2 mt-4 justify-content-center">
         <div *ngFor="let s of [1,2,3]"
-             class="progress-dot"
-             [style.width.%]="30"
-             [style.height.px]="4"
-             [style.background-color]="s <= currentStep ? 'var(--accent-color, #f0b90b)' : 'var(--border-color, rgba(255,255,255,0.1))'"
-             style="border-radius: 2px; transition: all 0.3s ease;">
+             class="stepper-dot"
+             [class.active]="s === currentStep"
+             [class.completed]="s < currentStep">
         </div>
       </div>
     </header>
@@ -25,18 +25,18 @@
         <!-- Step 1: Personal Info -->
         <div *ngIf="currentStep === 1" class="step-content animate-fade-in">
           <div class="mb-4">
-            <label class="form-label d-block text-secondary small mb-2">Nombre Completo</label>
+            <label class="form-label">Nombre Completo</label>
             <input type="text" formControlName="name" class="form-control" placeholder="Ej: Juan Pérez">
           </div>
 
           <div class="mb-4">
-            <label class="form-label d-block text-secondary small mb-2">Identificación</label>
+            <label class="form-label">Identificación</label>
             <input type="text" formControlName="identification" class="form-control" placeholder="Ej: 1712345678">
           </div>
 
           <div class="row">
             <div class="col-6 mb-4">
-              <label class="form-label d-block text-secondary small mb-2">Género</label>
+              <label class="form-label">Género</label>
               <select formControlName="gender" class="form-control">
                 <option value="MALE">Masculino</option>
                 <option value="FEMALE">Femenino</option>
@@ -44,7 +44,7 @@
               </select>
             </div>
             <div class="col-6 mb-4">
-              <label class="form-label d-block text-secondary small mb-2">Edad</label>
+              <label class="form-label">Edad</label>
               <input type="number" formControlName="age" class="form-control" placeholder="18">
             </div>
           </div>
@@ -53,17 +53,17 @@
         <!-- Step 2: Contact Info -->
         <div *ngIf="currentStep === 2" class="step-content animate-fade-in">
           <div class="mb-4">
-            <label class="form-label d-block text-secondary small mb-2">Email</label>
+            <label class="form-label">Email Corporativo / Personal</label>
             <input type="email" formControlName="email" class="form-control" placeholder="juan.perez@example.com">
           </div>
 
           <div class="mb-4">
-            <label class="form-label d-block text-secondary small mb-2">Teléfono</label>
+            <label class="form-label">Teléfono de Contacto</label>
             <input type="text" formControlName="phone" class="form-control" placeholder="0987654321">
           </div>
 
           <div class="mb-4">
-            <label class="form-label d-block text-secondary small mb-2">Dirección</label>
+            <label class="form-label">Dirección Domiciliaria</label>
             <input type="text" formControlName="address" class="form-control" placeholder="Quito, Ecuador">
           </div>
         </div>
@@ -71,13 +71,13 @@
         <!-- Step 3: Security & Status -->
         <div *ngIf="currentStep === 3" class="step-content animate-fade-in">
           <div class="mb-4" *ngIf="!isEdit">
-            <label class="form-label d-block text-secondary small mb-2">Contraseña de acceso</label>
+            <label class="form-label">Contraseña de acceso</label>
             <input type="password" formControlName="password" class="form-control" placeholder="Mínimo 6 caracteres">
           </div>
 
           <div class="mb-4 d-flex align-items-center justify-content-between py-3 surface-alt px-3">
             <div>
-              <label for="status" class="form-label mb-0 d-block">Cliente Activo</label>
+              <label for="status" class="form-label mb-0">Cliente Activo</label>
               <span class="text-secondary small">Permitir operaciones en el sistema</span>
             </div>
             <label class="switch">
@@ -97,7 +97,7 @@
             Siguiente
           </button>
 
-          <button *ngIf="currentStep === totalSteps" type="submit" class="btn btn-lg w-100" [ngClass]="isEdit ? 'btn-warning' : 'btn-success'" [disabled]="customerForm.invalid">
+          <button *ngIf="currentStep === totalSteps" type="submit" class="btn w-100" [ngClass]="isEdit ? 'btn-warning' : 'btn-success'" [disabled]="customerForm.invalid">
             {{isEdit ? 'Guardar Cambios' : 'Finalizar Registro'}}
           </button>
         </div>

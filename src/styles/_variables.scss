@@ -1,15 +1,16 @@
 // Shell Theme Variables (Minimalist Dark)
 $theme-dark-bg: #0b0e11;           /* Fondo principal */
-$theme-dark-surface: #1e2329;      /* Superficies de componentes */
-$theme-dark-surface-hover: #2b3139; /* Estados de hover */
-$theme-dark-text-primary: #eaecef;  /* Texto principal */
-$theme-dark-text-secondary: #848e9c; /* Texto de apoyo */
-$theme-dark-accent: #005ce6;        /* Azul acento */
-$theme-dark-accent-hover: #004bbd;  /* Azul hover */
-$theme-dark-border: rgba(43, 49, 57, 0.5); /* Líneas de división sutiles */
-$theme-dark-error: #d41020;         /* Rojo error */
-$theme-dark-success: #00c076;       /* Verde éxito/creación */
-$theme-dark-warning: #f0b90b;       /* Amarillo advertencia/edición */
+$theme-dark-surface: rgba(30, 35, 41, 0.4); /* Superficie con transparencia */
+$theme-dark-surface-solid: #1e2329;    /* Superficie sólida para dropdowns */
+$theme-dark-surface-hover: #2b3139;    /* Estados de hover */
+$theme-dark-text-primary: #eaecef;     /* Texto principal */
+$theme-dark-text-secondary: #848e9c;   /* Texto de apoyo */
+$theme-dark-accent: #005ce6;           /* Azul acento */
+$theme-dark-accent-hover: #004bbd;     /* Azul hover */
+$theme-dark-border: #2b3139;           /* Bordes sutiles */
+$theme-dark-error: #d41020;            /* Rojo error */
+$theme-dark-success: #00c076;          /* Verde éxito/creación */
+$theme-dark-warning: #f0b90b;          /* Amarillo advertencia/edición */
 
 // Typography
 $font-family-primary: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;

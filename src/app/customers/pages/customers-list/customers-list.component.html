@@ -1,36 +1,41 @@
-<div class="container">
-  <section class="search-section py-4">
-    <div class="d-flex gap-2">
-      <div class="position-relative w-100">
-        <span class="material-icons position-absolute top-50 translate-middle-y ms-3 text-secondary" style="font-size: 18px;">search</span>
-        <input
-          type="text"
-          class="form-control ps-5"
-          placeholder="Buscar cliente por nombre, identificación o email..."
-          [(ngModel)]="searchTerm"
-          (keyup.enter)="onSearch()"
-        >
-      </div>
-      <button class="btn btn-primary" type="button" (click)="onSearch()">
-        Buscar
-      </button>
+<div class="container py-4">
+  <header class="d-flex justify-content-between align-items-center mb-4 px-2">
+    <div>
+      <h1 class="h3 mb-1">Clientes</h1>
+      <p class="text-secondary small mb-0">Gestión de base de datos de clientes y cuentas.</p>
     </div>
-  </section>
+    <button class="btn btn-success" (click)="goToCreate()">
+      <span class="material-icons" style="font-size: 18px;">add</span>
+      Nuevo Cliente
+    </button>
+  </header>
 
-  <section class="list-section">
-    <div class="d-flex justify-content-between align-items-center mb-4 px-2">
-      <h2 class="h5 mb-0">Clientes</h2>
-      <button class="btn btn-success btn-sm" (click)="goToCreate()">
-        + Nuevo Cliente
-      </button>
+  <div class="surface p-0 overflow-hidden mb-4">
+    <div class="p-4 border-bottom" style="border-color: rgba(43, 49, 57, 0.5) !important;">
+      <div class="d-flex gap-3 align-items-center">
+        <div class="position-relative flex-grow-1">
+          <span class="material-icons position-absolute top-50 translate-middle-y text-secondary" style="font-size: 20px; left: 12px;">search</span>
+          <input
+            type="text"
+            class="form-control"
+            style="padding-left: 44px !important;"
+            placeholder="Buscar por nombre, identificación o email..."
+            [(ngModel)]="searchTerm"
+            (keyup.enter)="onSearch()"
+          >
+        </div>
+        <button class="btn btn-primary px-4" (click)="onSearch()" style="white-space: nowrap;">
+          Buscar
+        </button>
+      </div>
     </div>
 
     <!-- Mobile View -->
     <div class="show-mobile-only">
-      <div class="px-3" *ngFor="let customer of filteredCustomers" (click)="goToDetail(customer.id)">
-        <div class="py-3 d-flex justify-content-between align-items-center" style="border-bottom: 1px solid var(--border-color, rgba(43, 49, 57, 0.5));">
+      <div class="px-4" *ngFor="let customer of filteredCustomers; last as isLast" (click)="goToDetail(customer.id)">
+        <div class="py-4 d-flex justify-content-between align-items-center" [style.border-bottom]="isLast ? 'none' : '1px solid #2b3139'">
           <div>
-            <div class="d-flex align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2 mb-1">
               <span class="fw-bold">{{customer.name}}</span>
               <span class="status-badge" [ngClass]="customer.status ? 'status-active' : 'status-inactive'">
                 •
@@ -38,7 +43,7 @@
             </div>
             <div class="text-secondary small">{{customer.identification}} | {{customer.email}}</div>
           </div>
-          <span class="text-secondary">›</span>
+          <span class="text-secondary material-icons">chevron_right</span>
         </div>
       </div>
     </div>
@@ -48,16 +53,16 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Nombre</th>
+            <th class="ps-4">Nombre</th>
             <th>Identificación</th>
             <th>Email</th>
             <th>Estado</th>
-            <th class="text-end">Acciones</th>
+            <th class="text-end pe-4">Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let customer of filteredCustomers">
-            <td class="fw-bold">{{customer.name}}</td>
+            <td class="fw-bold ps-4">{{customer.name}}</td>
             <td>{{customer.identification}}</td>
             <td>{{customer.email}}</td>
             <td>
@@ -65,10 +70,14 @@
                 {{customer.status ? 'Activo' : 'Inactivo'}}
               </span>
             </td>
-            <td class="text-end">
+            <td class="text-end pe-4">
               <div class="d-flex justify-content-end gap-2">
-                <button class="btn btn-secondary btn-sm" (click)="goToDetail(customer.id)">Ver</button>
-                <button class="btn btn-danger btn-sm" (click)="confirmDelete(customer.id)">Eliminar</button>
+                <button class="btn btn-secondary btn-sm" (click)="goToDetail(customer.id)">
+                  <span class="material-icons" style="font-size: 16px;">visibility</span>
+                </button>
+                <button class="btn btn-danger btn-sm" (click)="confirmDelete(customer.id)">
+                  <span class="material-icons" style="font-size: 16px;">delete</span>
+                </button>
               </div>
             </td>
           </tr>
@@ -83,7 +92,7 @@
       <h3>No se encontraron clientes</h3>
       <p>Crea un nuevo cliente para comenzar a gestionar sus cuentas y movimientos.</p>
     </div>
-  </section>
+  </div>
 </div>
 
 <!-- Delete Modal -->

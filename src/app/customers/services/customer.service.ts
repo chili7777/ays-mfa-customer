@@ -8,7 +8,7 @@ import { Customer } from '../interfaces/customer.interface';
 })
 export class CustomerService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'https://ays-mfa-customer-gokba.ondigitalocean.app/customers';
+  private readonly apiUrl = '/api/customers';
 
   private getHeaders(isJson = false): HttpHeaders {
     const headers: any = {
