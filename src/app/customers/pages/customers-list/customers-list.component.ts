@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { CustomerService } from '../../services/customer.service';
 import { Customer } from '../../interfaces/customer.interface';
@@ -8,7 +9,7 @@ import { Customer } from '../../interfaces/customer.interface';
 @Component({
   selector: 'app-customers-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './customers-list.component.html'
 })
 export class CustomersListComponent implements OnInit {
@@ -16,7 +17,8 @@ export class CustomersListComponent implements OnInit {
   private readonly customerService = inject(CustomerService);
 
   customers = signal<Customer[]>([]);
-  searchTerm = signal<string>('');
+  searchControl = new FormControl('', { nonNullable: true });
+  searchTerm = toSignal(this.searchControl.valueChanges, { initialValue: '' });
   loading = signal<boolean>(false);
   showDeleteModal = signal<boolean>(false);
   deleteId = signal<string>('');

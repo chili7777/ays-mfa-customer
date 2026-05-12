@@ -24,17 +24,20 @@ export class CustomerFormComponent implements OnInit {
 
   constructor() {
     this.customerForm = this.fb.group({
-      name: ['', [Validators.required]],
-      identification: ['', [Validators.required]],
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      identification: ['', [Validators.required, Validators.pattern('^[0-9]{10,13}$')]],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required]],
-      address: ['', [Validators.required]],
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      address: ['', [Validators.required, Validators.minLength(5)]],
       gender: ['MALE', [Validators.required]],
-      age: [18, [Validators.required, Validators.min(18)]],
+      age: [18, [Validators.required, Validators.min(18), Validators.max(120)]],
       status: [true],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
+
+  // Getters para facilitar el acceso en el template
+  get f() { return this.customerForm.controls; }
 
   ngOnInit(): void {
     this.customerId = this.route.snapshot.paramMap.get('id');
@@ -113,37 +116,21 @@ export class CustomerFormComponent implements OnInit {
   }
 
   isStepValid(): boolean {
-    if (this.currentStep === 1) {
-      return this.customerForm.get('name')!.valid &&
-             this.customerForm.get('identification')!.valid &&
-             this.customerForm.get('gender')!.valid &&
-             this.customerForm.get('age')!.valid;
-    }
-    if (this.currentStep === 2) {
-      return this.customerForm.get('email')!.valid &&
-             this.customerForm.get('phone')!.valid &&
-             this.customerForm.get('address')!.valid;
-    }
-    if (this.currentStep === 3) {
-      return this.customerForm.get('password')!.valid;
-    }
-    return true;
+    const controls = this.getStepControls(this.currentStep);
+    return controls.every(controlName => this.customerForm.get(controlName)?.valid);
   }
 
   markStepAsTouched(): void {
-    if (this.currentStep === 1) {
-      this.customerForm.get('name')!.markAsTouched();
-      this.customerForm.get('identification')!.markAsTouched();
-      this.customerForm.get('gender')!.markAsTouched();
-      this.customerForm.get('age')!.markAsTouched();
-    }
-    if (this.currentStep === 2) {
-      this.customerForm.get('email')!.markAsTouched();
-      this.customerForm.get('phone')!.markAsTouched();
-      this.customerForm.get('address')!.markAsTouched();
-    }
-    if (this.currentStep === 3) {
-      this.customerForm.get('password')!.markAsTouched();
+    const controls = this.getStepControls(this.currentStep);
+    controls.forEach(controlName => this.customerForm.get(controlName)?.markAsTouched());
+  }
+
+  private getStepControls(step: number): string[] {
+    switch (step) {
+      case 1: return ['name', 'identification', 'gender', 'age'];
+      case 2: return ['email', 'phone', 'address'];
+      case 3: return ['password'];
+      default: return [];
     }
   }
 

@@ -9,8 +9,7 @@
             type="text"
             class="form-control ps-5"
             placeholder="Buscar cliente (nombre, ID o email)..."
-            [ngModel]="searchTerm()"
-            (ngModelChange)="searchTerm.set($event)"
+            [formControl]="searchControl"
             (keyup.enter)="onSearch()"
           >
         </div>
