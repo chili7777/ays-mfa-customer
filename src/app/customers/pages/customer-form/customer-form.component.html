@@ -1,7 +1,7 @@
 <div class="container py-4 d-flex justify-content-center align-items-center" style="min-height: 90vh;">
   <div class="w-100 animate-fade-in" style="max-width: 500px;">
     <header class="mb-5 text-center mt-4 position-relative">
-      <button class="btn btn-icon position-absolute" (click)="goBack()" title="Volver" style="left: 0; top: 0;">
+      <button class="btn btn-icon position-absolute" (click)="goBack()" title="Volver" style="left: 0; top: 0; color: var(--accent-color);">
         <span class="material-icons">arrow_back</span>
       </button>
       <div class="d-inline-flex p-3 rounded-circle mb-3" style="color: var(--accent-color);">
@@ -169,7 +169,7 @@
         <!-- Navigation -->
         <div class="mt-5 d-flex gap-3">
           <button type="button" class="btn btn-secondary flex-grow-1" (click)="currentStep === 1 ? goBack() : prevStep()">
-            <span class="material-icons d-lg-none" style="font-size: 18px;">{{currentStep === 1 ? 'close' : 'arrow_back'}}</span>
+            <span class="material-icons d-lg-none" style="font-size: 18px; color: var(--accent-color);">{{currentStep === 1 ? 'close' : 'arrow_back'}}</span>
             <span class="d-none d-lg-inline">{{currentStep === 1 ? 'Cancelar' : 'Anterior'}}</span>
           </button>
 
