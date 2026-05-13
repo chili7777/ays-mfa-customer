@@ -26,6 +26,7 @@ export class CustomersListComponent implements OnInit {
   userRole = signal<string>(this.getInitialRole());
   currentClientId = signal<string | null>(localStorage.getItem('clientId') || sessionStorage.getItem('clientId'));
 
+  isRedirecting = signal<boolean>(false);
   isAdmin = computed(() => {
     const role = this.userRole().toUpperCase();
     const hasAdminRole = role.includes('ADMIN') || role.includes('GESTOR') || role.includes('ROOT') || role.includes('MANAGER');
@@ -99,6 +100,13 @@ export class CustomersListComponent implements OnInit {
       const cid = params['clientId'] || params['client'];
       if (cid) {
         this.currentClientId.set(cid);
+      }
+
+      // Si no es admin, redirigir directamente al detalle del usuario (sus datos)
+      if (!this.isAdmin() && this.currentClientId()) {
+        this.isRedirecting.set(true);
+        this.goToDetail(this.currentClientId()!);
+        return;
       }
 
       // Cargar clientes después de tener el clientId

@@ -1,4 +1,4 @@
-<div class="container py-4">
+<div class="container py-4" *ngIf="!isRedirecting()">
   <div class="desktop-card shadow-sm animate-fade-in">
     <!-- Section Búsqueda - Minimalista (Basado en accounts) -->
     <section class="search-section mb-4">
@@ -179,4 +179,15 @@
       </button>
     </div>
   </div>
+</div>
+
+<!-- Pantalla de Redirección -->
+<div *ngIf="isRedirecting()" class="spinner-container py-5" style="height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+  <div class="modern-loader">
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="core"></div>
+  </div>
+  <p class="loading-text mt-3" style="color: #848e9c; font-weight: 500;">Cargando tu perfil...</p>
 </div>
