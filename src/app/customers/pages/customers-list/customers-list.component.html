@@ -22,8 +22,8 @@
 
     <section class="list-section">
       <div class="d-flex justify-content-between align-items-center mb-4 px-2">
-        <h2 class="h5 mb-0">Clientes</h2>
-        <button class="btn btn-success btn-sm" (click)="goToCreate()">
+        <h2 class="h5 mb-0">{{ userRole() === 'ADMIN' ? 'Gestión de Clientes' : 'Mi Perfil' }}</h2>
+        <button *ngIf="userRole() === 'ADMIN'" class="btn btn-success btn-sm" (click)="goToCreate()">
           <span class="material-icons d-lg-none" style="font-size: 18px;">add</span>
           <span class="d-none d-lg-inline">+ Nuevo</span>
         </button>
@@ -72,8 +72,8 @@
 
               <!-- Toggle de Activo (Abajo de ese, más junto) -->
               <div class="d-flex align-items-center gap-2" style="margin-top: -2px;">
-                <label class="switch" style="transform: scale(0.65); transform-origin: left center;" (click)="$event.stopPropagation()" [title]="customer.status ? 'Desactivar' : 'Activar'">
-                  <input type="checkbox" [checked]="customer.status" (change)="toggleStatus(customer)">
+                <label class="switch" style="transform: scale(0.65); transform-origin: left center;" (click)="onStatusClick($event, customer)" [title]="userRole() === 'ADMIN' ? (customer.status ? 'Desactivar' : 'Activar') : ''">
+                  <input type="checkbox" [checked]="customer.status" [disabled]="userRole() !== 'ADMIN'" (change)="toggleStatus(customer)">
                   <span class="slider"></span>
                 </label>
                 <span class="small fw-medium" [style.color]="customer.status ? '#00c076' : '#848e9c'" style="font-size: 11px; margin-left: -8px;">
@@ -96,7 +96,7 @@
               <th><span class="grayscale-emoji">📧</span> Email</th>
               <th><span class="grayscale-emoji">📱</span> Teléfono</th>
               <th class="text-center"><span class="grayscale-emoji">⚙️</span> Estado</th>
-              <th class="text-end" style="width: 120px;"><span class="grayscale-emoji">🛠️</span> Acciones</th>
+              <th class="text-end" style="width: 120px;" *ngIf="userRole() === 'ADMIN'"><span class="grayscale-emoji">🛠️</span> Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -112,8 +112,8 @@
               <td class="text-secondary small">{{customer.phone}}</td>
               <td class="text-center">
                 <div class="d-flex align-items-center justify-content-center gap-2">
-                  <label class="switch" style="transform: scale(0.8);" (click)="$event.stopPropagation()">
-                    <input type="checkbox" [checked]="customer.status" (change)="toggleStatus(customer)">
+                  <label class="switch" style="transform: scale(0.8);" (click)="onStatusClick($event, customer)">
+                    <input type="checkbox" [checked]="customer.status" [disabled]="userRole() !== 'ADMIN'" (change)="toggleStatus(customer)">
                     <span class="slider"></span>
                   </label>
                   <span class="small fw-medium" [style.color]="customer.status ? '#00c076' : '#848e9c'" style="min-width: 55px; text-align: left;">
@@ -121,7 +121,7 @@
                   </span>
                 </div>
               </td>
-              <td class="text-end">
+              <td class="text-end" *ngIf="userRole() === 'ADMIN'">
                 <div class="d-flex justify-content-end gap-2">
                   <button class="btn btn-warning btn-sm align-items-center gap-1" (click)="$event.stopPropagation(); goToEdit(customer.id)" title="Editar">
                     <span class="material-icons" style="font-size: 16px;">edit</span>

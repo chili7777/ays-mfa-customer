@@ -2,7 +2,7 @@ import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CustomerService } from '../../services/customer.service';
 import { Customer } from '../../interfaces/customer.interface';
 
@@ -14,6 +14,7 @@ import { Customer } from '../../interfaces/customer.interface';
 })
 export class CustomersListComponent implements OnInit {
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly customerService = inject(CustomerService);
 
   customers = signal<Customer[]>([]);
@@ -22,12 +23,20 @@ export class CustomersListComponent implements OnInit {
   loading = signal<boolean>(false);
   showDeleteModal = signal<boolean>(false);
   deleteId = signal<string>('');
+  userRole = signal<string>(localStorage.getItem('userRole') || 'USER');
+  currentClientId = signal<string | null>(localStorage.getItem('clientId'));
 
   filteredCustomers = computed(() => {
+    let list = this.customers();
+
+    // Filtro por rol
+    if (this.userRole() !== 'ADMIN' && this.currentClientId()) {
+      list = list.filter(c => c.id === this.currentClientId());
+    }
+
     const term = this.searchTerm().toLowerCase().trim();
-    const all = this.customers();
-    if (!term) return all;
-    return all.filter(c =>
+    if (!term) return list;
+    return list.filter(c =>
       c.name.toLowerCase().includes(term) ||
       c.identification.toLowerCase().includes(term) ||
       c.email.toLowerCase().includes(term)
@@ -35,11 +44,35 @@ export class CustomersListComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    // También permitimos recibir el clientId por query params para consistencia con cuentas
+    this.route.queryParams.subscribe(params => {
+      const cid = params['clientId'] || params['client'];
+      if (cid) {
+        this.currentClientId.set(cid);
+      }
+    });
+
     this.loadCustomers();
   }
 
   loadCustomers(): void {
     this.loading.set(true);
+
+    // Si es USER, cargar solo su perfil específico
+    if (this.userRole() !== 'ADMIN' && this.currentClientId()) {
+      this.customerService.getCustomerById(this.currentClientId()!).subscribe({
+        next: (data) => {
+          this.customers.set([data]);
+          this.loading.set(false);
+        },
+        error: (err: any) => {
+          console.error('Error al cargar perfil', err);
+          this.loading.set(false);
+        }
+      });
+      return;
+    }
+
     this.customerService.getCustomers().subscribe({
       next: (data) => {
         this.customers.set(data);
@@ -55,6 +88,13 @@ export class CustomersListComponent implements OnInit {
   onSearch(): void {
     // Ya no es estrictamente necesario gracias a computed(),
     // pero lo mantenemos para compatibilidad con el botón
+  }
+
+  onStatusClick(event: MouseEvent, customer: Customer): void {
+    event.stopPropagation();
+    if (this.userRole() === 'ADMIN') {
+      this.toggleStatus(customer);
+    }
   }
 
   goToCreate(): void {
