@@ -26,7 +26,6 @@ export class CustomersListComponent implements OnInit {
   userRole = signal<string>('USER');
   currentClientId = signal<string | null>(null);
 
-  isRedirecting = signal<boolean>(false);
   isAdmin = computed(() => {
     const role = this.userRole().toUpperCase();
     const hasAdminRole = role.includes('ADMIN') || role.includes('GESTOR') || role.includes('ROOT') || role.includes('MANAGER');
@@ -70,21 +69,8 @@ export class CustomersListComponent implements OnInit {
 
       console.log('Datos recibidos del Shell:', { role: this.userRole(), id: this.currentClientId() });
 
-      // 1. Si recibimos un clientId específico por URL, vamos al detalle
-      if (cid) {
-        this.isRedirecting.set(true);
-        this.goToDetail(cid);
-        return;
-      }
-
-      // 2. Si no es admin y tenemos un clientId detectado, redirigir a su perfil
-      if (!this.isAdmin() && this.currentClientId()) {
-        this.isRedirecting.set(true);
-        this.goToDetail(this.currentClientId()!);
-        return;
-      }
-
-      // 3. De lo contrario, cargar la lista normalmente
+      // Cargar la lista normalmente (el filtrado se maneja en loadCustomers y filteredCustomers)
+      // Se eliminan redirecciones automáticas para permitir ver el listado tanto a ADMIN como a USER
       this.loadCustomers();
     });
   }
