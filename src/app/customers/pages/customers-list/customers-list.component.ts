@@ -98,18 +98,23 @@ export class CustomersListComponent implements OnInit {
     // También permitimos recibir el clientId por query params para consistencia con cuentas
     this.route.queryParams.subscribe(params => {
       const cid = params['clientId'] || params['client'];
+
+      // Si recibimos un clientId por URL, vamos directo al detalle (Requerimiento de usuario)
       if (cid) {
         this.currentClientId.set(cid);
+        this.isRedirecting.set(true);
+        this.goToDetail(cid);
+        return;
       }
 
-      // Si no es admin, redirigir directamente al detalle del usuario (sus datos)
+      // Si no es admin y tenemos un clientId en storage, redirigir directamente a su perfil
       if (!this.isAdmin() && this.currentClientId()) {
         this.isRedirecting.set(true);
         this.goToDetail(this.currentClientId()!);
         return;
       }
 
-      // Cargar clientes después de tener el clientId
+      // Cargar clientes normalmente
       this.loadCustomers();
     });
   }
