@@ -33,7 +33,6 @@ export class CustomersListComponent implements OnInit {
     const noClientRestricted = !localStorage.getItem('clientId') && !sessionStorage.getItem('clientId');
     // Depuración interna (el usuario no la ve, pero ayuda a asegurar que el botón aparezca)
     const isActuallyAdmin = hasAdminRole || noClientRestricted;
-    console.log('Role Detection:', { role, hasAdminRole, noClientRestricted, isActuallyAdmin });
     return isActuallyAdmin;
   });
 
