@@ -30,11 +30,16 @@ export class CustomersListComponent implements OnInit {
   isAdmin = computed(() => {
     const role = this.userRole().toUpperCase();
     const hasAdminRole = role.includes('ADMIN') || role.includes('GESTOR') || role.includes('ROOT') || role.includes('MANAGER');
+
+    // Si detectamos un rol de administrador, tiene permisos totales
+    if (hasAdminRole) return true;
+
+    // Si el rol es explícitamente USER o similar, NO es admin
+    if (role === 'USER' || role === 'CLIENT' || role === 'CUSTOMER') return false;
+
     // Si no hay un clientId específico en el storage, probablemente somos un admin gestionando todo
     const noClientRestricted = !localStorage.getItem('clientId') && !sessionStorage.getItem('clientId');
-    // Depuración interna (el usuario no la ve, pero ayuda a asegurar que el botón aparezca)
-    const isActuallyAdmin = hasAdminRole || noClientRestricted;
-    return isActuallyAdmin;
+    return noClientRestricted;
   });
 
   private getInitialRole(): string {
