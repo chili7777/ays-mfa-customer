@@ -24,11 +24,17 @@ export class CustomersListComponent implements OnInit {
   showDeleteModal = signal<boolean>(false);
   deleteId = signal<string>('');
   userRole = signal<string>(this.getInitialRole());
-  currentClientId = signal<string | null>(localStorage.getItem('clientId'));
+  currentClientId = signal<string | null>(localStorage.getItem('clientId') || sessionStorage.getItem('clientId'));
 
   isAdmin = computed(() => {
     const role = this.userRole().toUpperCase();
-    return role.includes('ADMIN') || role.includes('GESTOR') || role.includes('ROOT') || role.includes('MANAGER');
+    const hasAdminRole = role.includes('ADMIN') || role.includes('GESTOR') || role.includes('ROOT') || role.includes('MANAGER');
+    // Si no hay un clientId específico en el storage, probablemente somos un admin gestionando todo
+    const noClientRestricted = !localStorage.getItem('clientId') && !sessionStorage.getItem('clientId');
+    // Depuración interna (el usuario no la ve, pero ayuda a asegurar que el botón aparezca)
+    const isActuallyAdmin = hasAdminRole || noClientRestricted;
+    console.log('Role Detection:', { role, hasAdminRole, noClientRestricted, isActuallyAdmin });
+    return isActuallyAdmin;
   });
 
   private getInitialRole(): string {
@@ -43,12 +49,14 @@ export class CustomersListComponent implements OnInit {
     const sessionRole = sessionStorage.getItem('userRole') || sessionStorage.getItem('role');
     if (sessionRole) return sessionRole.trim().toUpperCase();
 
-    // 3. Intentar parsear objeto 'user'
+    // 3. Intentar parsear objeto 'user' o 'auth'
     try {
-      const userData = localStorage.getItem('user') || sessionStorage.getItem('user');
+      const userData = localStorage.getItem('user') || sessionStorage.getItem('user') ||
+                       localStorage.getItem('auth') || sessionStorage.getItem('auth');
       if (userData) {
         const user = JSON.parse(userData);
-        const roleValue = user.role || user.userRole || user.type || user.roleName || user.roles?.[0];
+        const data = user.user || user.data || user;
+        const roleValue = data.role || data.userRole || data.type || data.roleName || data.roles?.[0] || data.roleId;
         if (roleValue) return roleValue.toString().trim().toUpperCase();
       }
     } catch (e) {}

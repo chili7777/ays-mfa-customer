@@ -17,8 +17,9 @@
           <span class="material-icons d-md-none">search</span>
           <span class="d-none d-md-inline">Buscar</span>
         </button>
-        <button *ngIf="isAdmin()" class="btn btn-success d-flex align-items-center px-3" type="button" (click)="goToCreate()" title="Nuevo Cliente">
+        <button *ngIf="isAdmin()" class="btn btn-success d-flex align-items-center px-4" type="button" (click)="goToCreate()" title="Nuevo Cliente" id="btn-create-customer-main">
           <span class="material-icons">add</span>
+          <span class="ms-1">Nuevo Cliente</span>
         </button>
       </div>
     </section>
@@ -26,9 +27,9 @@
     <section class="list-section">
       <div class="d-flex justify-content-between align-items-center mb-4 px-2">
         <h2 class="h5 mb-0">{{ isAdmin() ? 'Gestión de Clientes' : 'Mi Perfil' }}</h2>
-        <button *ngIf="isAdmin()" class="btn btn-success btn-sm" (click)="goToCreate()" title="Registrar nuevo cliente">
-          <span class="material-icons d-md-none" style="font-size: 18px;">add</span>
-          <span class="d-none d-md-inline">+ Nuevo</span>
+        <button *ngIf="isAdmin()" class="btn btn-success btn-sm d-flex align-items-center" (click)="goToCreate()" title="Registrar nuevo cliente">
+          <span class="material-icons" style="font-size: 18px;">add</span>
+          <span class="ms-1">+ Nuevo</span>
         </button>
       </div>
 
@@ -166,9 +167,9 @@
 </div>
 
 <!-- Botón flotante para móvil (FAB) -->
-<div class="d-md-none position-fixed bottom-0 end-0 m-4" style="z-index: 100;" *ngIf="isAdmin()">
-  <button class="btn btn-success rounded-circle shadow-lg d-flex align-items-center justify-content-center" style="width: 56px; height: 56px; border: none;" (click)="goToCreate()" title="Nuevo Cliente">
-    <span class="material-icons" style="font-size: 28px; color: white;">add</span>
+<div class="position-fixed bottom-0 end-0 m-4" style="z-index: 100;" *ngIf="isAdmin()">
+  <button class="btn btn-success rounded-circle shadow-lg d-flex align-items-center justify-content-center" style="width: 56px; height: 56px; border: none; background-color: #00c076 !important; color: white !important;" (click)="goToCreate()" title="Nuevo Cliente">
+    <span class="material-icons" style="font-size: 28px;">add</span>
   </button>
 </div>
 
