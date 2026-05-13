@@ -34,10 +34,10 @@ export class CustomerService {
 
         // Normalizar ID para asegurar navegación (Priorizar UUID sobre identificación)
         return customers.map((c: any) => {
-          const uuid = c.uuid || c._id || c.customerId;
+          const uuid = c.uuid || c.id || c.customerId || c._id || c.idCustomer;
           return {
             ...c,
-            id: uuid || c.id || c.identification
+            id: uuid || c.identification
           };
         });
       })
@@ -48,10 +48,10 @@ export class CustomerService {
     return this.http.get<any>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() }).pipe(
       map(response => {
         const data = response.data || response.customer || response;
-        const uuid = data.uuid || data._id || data.customerId;
+        const uuid = data.uuid || data.id || data.customerId || data._id || data.idCustomer;
         return {
           ...data,
-          id: uuid || data.id || id
+          id: uuid || id
         };
       })
     );

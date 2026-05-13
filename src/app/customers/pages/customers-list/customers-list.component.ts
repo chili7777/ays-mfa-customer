@@ -50,9 +50,10 @@ export class CustomersListComponent implements OnInit {
       if (cid) {
         this.currentClientId.set(cid);
       }
-    });
 
-    this.loadCustomers();
+      // Cargar clientes después de tener el clientId
+      this.loadCustomers();
+    });
   }
 
   loadCustomers(): void {
