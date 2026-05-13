@@ -1,8 +1,9 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../../services/customer.service';
+import { MfeBridgeService } from '../../../core/services/mfe-bridge.service';
 
 @Component({
   selector: 'app-customer-form',
@@ -15,11 +16,12 @@ export class CustomerFormComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly customerService = inject(CustomerService);
+  private readonly mfeBridge = inject(MfeBridgeService);
 
   customerForm: FormGroup;
   isEdit = false;
   customerId: string | null = null;
-  userRole = signal<string>('USER');
+  userRole = computed(() => (this.mfeBridge.sessionData().role || 'USER').toUpperCase());
   currentStep = 1;
   totalSteps = 3;
 
@@ -41,13 +43,6 @@ export class CustomerFormComponent implements OnInit {
   get f() { return this.customerForm.controls; }
 
   ngOnInit(): void {
-    // Obtenemos el rol desde la Shell a través de queryParams
-    this.route.queryParams.subscribe(params => {
-      const role = params['role'] || 'USER';
-      this.userRole.set(role);
-      console.log('Datos recibidos del Shell en Formulario:', { role: this.userRole() });
-    });
-
     this.customerId = this.route.snapshot.paramMap.get('id');
     if (this.customerId) {
       this.isEdit = true;

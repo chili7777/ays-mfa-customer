@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../../services/customer.service';
 import { Customer } from '../../interfaces/customer.interface';
+import { MfeBridgeService } from '../../../core/services/mfe-bridge.service';
 
 @Component({
   selector: 'app-customer-detail',
@@ -14,13 +15,14 @@ export class CustomerDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly customerService = inject(CustomerService);
+  private readonly mfeBridge = inject(MfeBridgeService);
 
   customer = signal<Customer | null>(null);
   loading = signal(true);
   errorMessage = signal<string | null>(null);
   showDeleteModal = signal(false);
 
-  userRole = signal<string>('USER');
+  userRole = computed(() => (this.mfeBridge.sessionData().role || 'USER').toUpperCase());
   isAdmin = computed(() => {
     const role = this.userRole().toUpperCase();
     const hasAdminRole = role.includes('ADMIN') || role.includes('GESTOR') || role.includes('ROOT') || role.includes('MANAGER');
@@ -37,13 +39,6 @@ export class CustomerDetailComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // Obtenemos el rol desde la Shell a través de queryParams (Requerimiento MFE)
-    this.route.queryParams.subscribe(params => {
-      const role = params['role'] || 'USER';
-      this.userRole.set(role); // Rol tal cual viene del Shell
-      console.log('Datos recibidos del Shell en Detalle:', { role: this.userRole() });
-    });
-
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.loadCustomer(id);

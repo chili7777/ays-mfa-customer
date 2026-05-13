@@ -1,10 +1,11 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CustomerService } from '../../services/customer.service';
 import { Customer } from '../../interfaces/customer.interface';
+import { MfeBridgeService } from '../../../core/services/mfe-bridge.service';
 
 @Component({
   selector: 'app-customers-list',
@@ -16,6 +17,7 @@ export class CustomersListComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly customerService = inject(CustomerService);
+  private readonly mfeBridge = inject(MfeBridgeService);
 
   customers = signal<Customer[]>([]);
   searchControl = new FormControl('', { nonNullable: true });
@@ -23,8 +25,31 @@ export class CustomersListComponent implements OnInit {
   loading = signal<boolean>(false);
   showDeleteModal = signal<boolean>(false);
   deleteId = signal<string>('');
-  userRole = signal<string>('USER');
-  currentClientId = signal<string | null>(null);
+
+  // Datos sincronizados desde el Bridge
+  userRole = computed(() => (this.mfeBridge.sessionData().role || 'USER').toUpperCase());
+  currentClientId = computed(() => this.mfeBridge.sessionData().clientId);
+  isRedirecting = signal<boolean>(false);
+
+  constructor() {
+    // Reaccionar a cambios en los datos de sesión sincronizados
+    effect(() => {
+      const role = this.userRole();
+      const clientId = this.currentClientId();
+
+      if (role && clientId) {
+        console.log('[MFE] Datos sincronizados recibidos:', { role, clientId });
+
+        // Si no es admin, redirigir directamente al detalle (Requerimiento previo)
+        if (!this.isAdmin()) {
+          this.isRedirecting.set(true);
+          this.goToDetail(clientId);
+        } else {
+          this.loadCustomers();
+        }
+      }
+    });
+  }
 
   isAdmin = computed(() => {
     const role = this.userRole().toUpperCase();
@@ -59,19 +84,12 @@ export class CustomersListComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    // Obtenemos los datos desde la Shell a través de queryParams (Requerimiento MFE)
-    this.route.queryParams.subscribe(params => {
-      const role = params['role'] || 'USER';
-      const cid = params['clientId'] || params['client'] || null;
-
-      this.userRole.set(role); // Guardamos el rol tal cual viene para la UI
-      this.currentClientId.set(cid);
-
-      console.log('Datos recibidos del Shell:', { role: this.userRole(), id: this.currentClientId() });
-
-      // Ya no redireccionamos automáticamente para que /clients siempre muestre el listado
-      // como solicita el usuario. El clientId se usará para filtrar/cargar los datos.
-      this.loadCustomers();
+    // Escuchamos queryParams solo por si hay navegación interna,
+    // pero el rol y clientId vienen del BridgeService.
+    this.route.queryParams.subscribe(() => {
+      if (this.isAdmin() || !this.currentClientId()) {
+        this.loadCustomers();
+      }
     });
   }
 
