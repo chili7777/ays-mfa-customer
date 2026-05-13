@@ -64,6 +64,14 @@ export class CustomerDetailComponent implements OnInit {
     }
   }
 
+  goToAccounts(): void {
+    const current = this.customer();
+    if (current) {
+      // Usamos el Bridge para navegar a la Shell
+      this.mfeBridge.navigateTo('/accounts', { client: current.id });
+    }
+  }
+
   toggleStatus(): void {
     if (!this.isAdmin()) return;
     const current = this.customer();

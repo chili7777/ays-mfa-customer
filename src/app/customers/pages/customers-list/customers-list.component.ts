@@ -144,7 +144,9 @@ export class CustomersListComponent implements OnInit {
   }
 
   goToAccounts(id: string): void {
-    this.router.navigate(['/accounts'], { queryParams: { clientId: id }, queryParamsHandling: 'merge' });
+    // Para navegación entre Microfrontends, usamos el Bridge hacia la Shell
+    // Usamos 'client' como parámetro para evitar que la Shell lo elimine (por ser palabra reservada clientId)
+    this.mfeBridge.navigateTo('/accounts', { client: id });
   }
 
   goToEdit(id: string): void {

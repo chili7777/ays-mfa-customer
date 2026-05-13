@@ -110,11 +110,15 @@
         </div>
 
         <div class="mt-5 d-flex gap-3">
-          <button class="btn btn-warning flex-grow-1" (click)="goToEdit()">
+          <button class="btn btn-primary flex-grow-1 d-flex align-items-center justify-content-center gap-2" (click)="goToAccounts()">
+            <span class="material-icons" style="font-size: 18px;">account_balance</span>
+            <span>Ver Cuentas</span>
+          </button>
+          <button class="btn btn-warning flex-grow-1 d-flex align-items-center justify-content-center gap-2" (click)="goToEdit()">
             <span class="material-icons" style="font-size: 18px;">edit</span>
             <span class="d-none d-lg-inline">Editar</span>
           </button>
-          <button *ngIf="isAdmin()" class="btn btn-danger flex-grow-1" (click)="showDeleteModal.set(true)">
+          <button *ngIf="isAdmin()" class="btn btn-danger flex-grow-1 d-flex align-items-center justify-content-center gap-2" (click)="showDeleteModal.set(true)">
             <span class="material-icons" style="font-size: 18px;">delete</span>
             <span class="d-none d-lg-inline">Eliminar</span>
           </button>

@@ -59,6 +59,18 @@ export class MfeBridgeService {
     // pero la Shell responderá validando su propia seguridad.
   }
 
+  /**
+   * Solicita a la Shell navegar a una ruta específica con parámetros.
+   * Útil para navegación entre Microfrontends.
+   */
+  navigateTo(path: string, queryParams?: any) {
+    console.log('[MFE Bridge] Solicitando navegación a la Shell:', { path, queryParams });
+    window.parent.postMessage({
+      type: 'MFE_NAVIGATE',
+      payload: { path, queryParams }
+    }, '*');
+  }
+
   private isTrustedOrigin(origin: string): boolean {
     // En producción esto debería ser más estricto
     return this.trustedOrigins.includes(origin) ||
