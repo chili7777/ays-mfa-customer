@@ -69,8 +69,14 @@ export class CustomersListComponent implements OnInit {
 
       console.log('Datos recibidos del Shell:', { role: this.userRole(), id: this.currentClientId() });
 
-      // Cargar la lista normalmente (el filtrado se maneja en loadCustomers y filteredCustomers)
-      // Se eliminan redirecciones automáticas para permitir ver el listado tanto a ADMIN como a USER
+      // Si hay un clientId, redireccionamos al detalle (Requerimiento de deep linking)
+      // Usamos state para evitar bucles al volver desde el detalle
+      const isReturning = window.history.state?.returning;
+      if (cid && !isReturning) {
+        this.goToDetail(cid);
+        return;
+      }
+
       this.loadCustomers();
     });
   }

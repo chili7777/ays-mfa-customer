@@ -149,6 +149,9 @@ export class CustomerFormComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/customers'], { queryParamsHandling: 'preserve' });
+    this.router.navigate(['/customers'], {
+      queryParamsHandling: 'preserve',
+      state: { returning: true }
+    });
   }
 }
