@@ -32,6 +32,8 @@ export class CustomerFormComponent implements OnInit {
   });
   currentStep = 1;
   totalSteps = 3;
+  errorMessage = signal<string | null>(null);
+  successMessage = signal<string | null>(null);
 
   constructor() {
     this.customerForm = this.fb.group({
@@ -74,7 +76,7 @@ export class CustomerFormComponent implements OnInit {
       },
       error: (err: any) => {
         console.error('Error al cargar cliente', err);
-        alert('No se pudo cargar la información del cliente');
+        this.showErrorMessage('No se pudo cargar la información del cliente');
         this.goBack();
       }
     });
@@ -83,7 +85,7 @@ export class CustomerFormComponent implements OnInit {
   onSubmit(): void {
     if (this.customerForm.invalid) {
       this.customerForm.markAllAsTouched();
-      alert('Por favor, complete todos los campos requeridos correctamente.');
+      this.showErrorMessage('Por favor, complete todos los campos requeridos correctamente.');
       return;
     }
 
@@ -92,28 +94,42 @@ export class CustomerFormComponent implements OnInit {
     if (this.isEdit) {
       this.customerService.updateCustomer(formValue, this.customerId!).subscribe({
         next: () => {
-          alert('Cliente actualizado correctamente');
-          this.goBack();
+          this.showSuccessMessage('Cliente actualizado correctamente');
+          setTimeout(() => this.goBack(), 1500);
         },
         error: (err: any) => {
           console.error('Error al actualizar', err);
           const errorMsg = err.error?.errors?.[0]?.businessMessage || err.error?.message || 'Error desconocido';
-          alert('Error al actualizar el cliente: ' + errorMsg);
+          this.showErrorMessage('Error al actualizar el cliente: ' + errorMsg);
         }
       });
     } else {
       this.customerService.createCustomer(formValue).subscribe({
         next: () => {
-          alert('Cliente creado correctamente');
-          this.goBack();
+          this.showSuccessMessage('Cliente creado correctamente');
+          setTimeout(() => this.goBack(), 1500);
         },
         error: (err: any) => {
           console.error('Error al crear', err);
           const errorMsg = err.error?.errors?.[0]?.businessMessage || err.error?.message || 'Error desconocido';
-          alert('Error al crear el cliente: ' + errorMsg);
+          this.showErrorMessage('Error al crear el cliente: ' + errorMsg);
         }
       });
     }
+  }
+
+  private showErrorMessage(message: string): void {
+    this.errorMessage.set(message);
+    setTimeout(() => {
+      if (this.errorMessage() === message) this.errorMessage.set(null);
+    }, 8000);
+  }
+
+  private showSuccessMessage(message: string): void {
+    this.successMessage.set(message);
+    setTimeout(() => {
+      if (this.successMessage() === message) this.successMessage.set(null);
+    }, 5000);
   }
 
   nextStep(): void {

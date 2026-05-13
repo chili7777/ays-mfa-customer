@@ -1,5 +1,20 @@
 <div class="container py-4 d-flex justify-content-center align-items-center" style="min-height: 90vh;">
   <div class="w-100 animate-fade-in" style="max-width: 500px;">
+    <!-- Mensajes de Notificación -->
+    @if (errorMessage()) {
+      <div class="alert alert-danger d-flex align-items-center animate-fade-in mb-4" role="alert">
+        <span class="material-icons me-3">error_outline</span>
+        <div class="flex-grow-1 small">{{ errorMessage() }}</div>
+        <button type="button" class="btn-close ms-2" style="font-size: 0.7rem;" (click)="errorMessage.set(null)"></button>
+      </div>
+    }
+    @if (successMessage()) {
+      <div class="alert alert-success d-flex align-items-center animate-fade-in mb-4" role="alert">
+        <span class="material-icons me-3">check_circle_outline</span>
+        <div class="flex-grow-1 small">{{ successMessage() }}</div>
+        <button type="button" class="btn-close ms-2" style="font-size: 0.7rem;" (click)="successMessage.set(null)"></button>
+      </div>
+    }
     <header class="mb-5 text-center mt-4 position-relative">
       <button class="btn btn-icon position-absolute" (click)="goBack()" title="Volver" style="left: 0; top: 0; color: var(--accent-color);">
         <span class="material-icons">arrow_back</span>
