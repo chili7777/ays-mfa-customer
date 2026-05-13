@@ -99,7 +99,13 @@ export class CustomerFormComponent implements OnInit {
         },
         error: (err: any) => {
           console.error('Error al actualizar', err);
-          const errorMsg = err.error?.errors?.[0]?.businessMessage || err.error?.message || 'Error desconocido';
+          const errorMsg = err.error?.detail || err.error?.errors?.[0]?.businessMessage || err.error?.message || 'Error desconocido';
+
+          if (errorMsg.includes('identificación ya existe')) {
+            this.customerForm.get('identification')?.setErrors({ duplicate: true });
+            this.currentStep = 1; // Volver al primer paso para que vea el error
+          }
+
           this.showErrorMessage('Error al actualizar el cliente: ' + errorMsg);
         }
       });
@@ -111,7 +117,13 @@ export class CustomerFormComponent implements OnInit {
         },
         error: (err: any) => {
           console.error('Error al crear', err);
-          const errorMsg = err.error?.errors?.[0]?.businessMessage || err.error?.message || 'Error desconocido';
+          const errorMsg = err.error?.detail || err.error?.errors?.[0]?.businessMessage || err.error?.message || 'Error desconocido';
+
+          if (errorMsg.includes('identificación ya existe')) {
+            this.customerForm.get('identification')?.setErrors({ duplicate: true });
+            this.currentStep = 1; // Volver al primer paso para que vea el error
+          }
+
           this.showErrorMessage('Error al crear el cliente: ' + errorMsg);
         }
       });

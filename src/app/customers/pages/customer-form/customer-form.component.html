@@ -76,6 +76,9 @@
             <div class="invalid-feedback animate-fade-in" *ngIf="f['identification'].errors?.['pattern'] && f['identification'].touched">
               Debe ser numérico (10 a 13 dígitos)
             </div>
+            <div class="invalid-feedback animate-fade-in" *ngIf="f['identification'].errors?.['duplicate'] && f['identification'].touched">
+              La identificación ya existe para otro cliente
+            </div>
           </div>
 
           <div class="row">
