@@ -22,8 +22,8 @@
           <span class="fw-medium small" [style.color]="c.status ? '#00c076' : '#d41020'">
             {{ c.status ? 'Cliente Activo' : 'Cliente Inactivo' }}
           </span>
-          <label class="switch" style="transform: scale(0.8);" [title]="isAdmin() ? (c.status ? 'Desactivar cuenta' : 'Activar cuenta') : ''">
-            <input type="checkbox" [checked]="c.status" [disabled]="!isAdmin()" (change)="toggleStatus()">
+          <label *ngIf="isAdmin()" class="switch" style="transform: scale(0.8);" [title]="c.status ? 'Desactivar cuenta' : 'Activar cuenta'">
+            <input type="checkbox" [checked]="c.status" (change)="toggleStatus()">
             <span class="slider"></span>
           </label>
         </div>

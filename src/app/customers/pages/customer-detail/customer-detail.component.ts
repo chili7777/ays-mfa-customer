@@ -27,14 +27,9 @@ export class CustomerDetailComponent implements OnInit {
     const role = this.userRole().toUpperCase();
     const hasAdminRole = role.includes('ADMIN') || role.includes('GESTOR') || role.includes('ROOT') || role.includes('MANAGER');
 
-    // Si detectamos un rol de administrador, tiene permisos totales
     if (hasAdminRole) return true;
-
-    // Si el rol es explícitamente USER o similar, NO es admin
     if (role === 'USER' || role === 'CLIENT' || role === 'CUSTOMER') return false;
-
-    // Por defecto en detalle, si no es admin, no tiene permisos administrativos
-    return false;
+    return !this.mfeBridge.sessionData().clientId;
   });
 
 

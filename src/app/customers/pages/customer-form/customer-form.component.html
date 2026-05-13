@@ -157,7 +157,7 @@
             </div>
           </div>
 
-          <div class="mb-4 d-flex align-items-center justify-content-between py-3 surface-alt px-3 rounded">
+          <div *ngIf="isAdmin()" class="mb-4 d-flex align-items-center justify-content-between py-3 surface-alt px-3 rounded">
             <div>
               <label for="status" class="fw-medium d-block mb-0">Estado Activo</label>
               <span class="text-secondary small">Habilitar acceso inmediato</span>

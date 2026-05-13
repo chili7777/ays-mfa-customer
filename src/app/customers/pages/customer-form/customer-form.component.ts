@@ -22,6 +22,14 @@ export class CustomerFormComponent implements OnInit {
   isEdit = false;
   customerId: string | null = null;
   userRole = computed(() => (this.mfeBridge.sessionData().role || 'USER').toUpperCase());
+  isAdmin = computed(() => {
+    const role = this.userRole().toUpperCase();
+    const hasAdminRole = role.includes('ADMIN') || role.includes('GESTOR') || role.includes('ROOT') || role.includes('MANAGER');
+
+    if (hasAdminRole) return true;
+    if (role === 'USER' || role === 'CLIENT' || role === 'CUSTOMER') return false;
+    return !this.mfeBridge.sessionData().clientId;
+  });
   currentStep = 1;
   totalSteps = 3;
 
