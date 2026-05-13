@@ -98,10 +98,7 @@ export class CustomerDetailComponent implements OnInit {
       this.customerService.deleteCustomer(current.id).subscribe({
         next: () => {
           this.showDeleteModal.set(false);
-          this.router.navigate(['/customers'], {
-            queryParamsHandling: 'preserve',
-            state: { returning: true }
-          });
+          this.router.navigate(['/customers'], { queryParamsHandling: 'preserve' });
         },
         error: (err: any) => {
           this.errorMessage.set('No se pudo eliminar el cliente. Verifique dependencias.');
@@ -112,9 +109,6 @@ export class CustomerDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/customers'], {
-      queryParamsHandling: 'preserve',
-      state: { returning: true }
-    });
+    this.router.navigate(['/customers'], { queryParamsHandling: 'preserve' });
   }
 }

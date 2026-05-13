@@ -69,14 +69,8 @@ export class CustomersListComponent implements OnInit {
 
       console.log('Datos recibidos del Shell:', { role: this.userRole(), id: this.currentClientId() });
 
-      // Si hay un clientId, redireccionamos al detalle (Requerimiento de deep linking)
-      // Usamos state para evitar bucles al volver desde el detalle
-      const isReturning = window.history.state?.returning;
-      if (cid && !isReturning) {
-        this.goToDetail(cid);
-        return;
-      }
-
+      // Ya no redireccionamos automáticamente para que /clients siempre muestre el listado
+      // como solicita el usuario. El clientId se usará para filtrar/cargar los datos.
       this.loadCustomers();
     });
   }
