@@ -23,8 +23,8 @@ export class CustomersListComponent implements OnInit {
   loading = signal<boolean>(false);
   showDeleteModal = signal<boolean>(false);
   deleteId = signal<string>('');
-  userRole = signal<string>(this.getInitialRole());
-  currentClientId = signal<string | null>(localStorage.getItem('clientId') || sessionStorage.getItem('clientId'));
+  userRole = signal<string>('USER');
+  currentClientId = signal<string | null>(null);
 
   isRedirecting = signal<boolean>(false);
   isAdmin = computed(() => {
@@ -37,50 +37,10 @@ export class CustomersListComponent implements OnInit {
     // Si el rol es explícitamente USER o similar, NO es admin
     if (role === 'USER' || role === 'CLIENT' || role === 'CUSTOMER') return false;
 
-    // Si no hay un clientId específico en el storage, probablemente somos un admin gestionando todo
-    const noClientRestricted = !localStorage.getItem('clientId') && !sessionStorage.getItem('clientId');
-    return noClientRestricted;
+    // Si no hay un clientId específico, probablemente somos un admin o gestor genérico
+    return !this.currentClientId();
   });
 
-  private getInitialRole(): string {
-    // 1. Intentar desde localStorage (varias llaves comunes)
-    const rawRole = localStorage.getItem('userRole') ||
-                    localStorage.getItem('role') ||
-                    localStorage.getItem('user_role') ||
-                    localStorage.getItem('roleName');
-    if (rawRole) return rawRole.trim().toUpperCase();
-
-    // 2. Intentar desde sessionStorage
-    const sessionRole = sessionStorage.getItem('userRole') || sessionStorage.getItem('role');
-    if (sessionRole) return sessionRole.trim().toUpperCase();
-
-    // 3. Intentar parsear objeto 'user' o 'auth'
-    try {
-      const userData = localStorage.getItem('user') || sessionStorage.getItem('user') ||
-                       localStorage.getItem('auth') || sessionStorage.getItem('auth');
-      if (userData) {
-        const user = JSON.parse(userData);
-        const data = user.user || user.data || user;
-        const roleValue = data.role || data.userRole || data.type || data.roleName || data.roles?.[0] || data.roleId;
-        if (roleValue) return roleValue.toString().trim().toUpperCase();
-      }
-    } catch (e) {}
-
-    // 4. Intentar desde cookies
-    try {
-      const cookies = document.cookie.split(';');
-      for (let c of cookies) {
-        const parts = c.trim().split('=');
-        if (parts.length === 2) {
-          const key = parts[0];
-          const value = parts[1];
-          if (key === 'role' || key === 'userRole') return decodeURIComponent(value).trim().toUpperCase();
-        }
-      }
-    } catch (e) {}
-
-    return 'USER';
-  }
 
   filteredCustomers = computed(() => {
     let list = this.customers();
@@ -100,26 +60,31 @@ export class CustomersListComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    // También permitimos recibir el clientId por query params para consistencia con cuentas
+    // Obtenemos los datos desde la Shell a través de queryParams (Requerimiento MFE)
     this.route.queryParams.subscribe(params => {
-      const cid = params['clientId'] || params['client'];
+      const role = params['role'] || 'USER';
+      const cid = params['clientId'] || params['client'] || null;
 
-      // Si recibimos un clientId por URL, vamos directo al detalle (Requerimiento de usuario)
+      this.userRole.set(role.toUpperCase());
+      this.currentClientId.set(cid);
+
+      console.log('Datos recibidos del Shell:', { role: this.userRole(), id: this.currentClientId() });
+
+      // 1. Si recibimos un clientId específico por URL, vamos al detalle
       if (cid) {
-        this.currentClientId.set(cid);
         this.isRedirecting.set(true);
         this.goToDetail(cid);
         return;
       }
 
-      // Si no es admin y tenemos un clientId en storage, redirigir directamente a su perfil
+      // 2. Si no es admin y tenemos un clientId detectado, redirigir a su perfil
       if (!this.isAdmin() && this.currentClientId()) {
         this.isRedirecting.set(true);
         this.goToDetail(this.currentClientId()!);
         return;
       }
 
-      // Cargar clientes normalmente
+      // 3. De lo contrario, cargar la lista normalmente
       this.loadCustomers();
     });
   }

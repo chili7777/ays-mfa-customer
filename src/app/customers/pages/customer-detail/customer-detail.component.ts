@@ -20,7 +20,7 @@ export class CustomerDetailComponent implements OnInit {
   errorMessage = signal<string | null>(null);
   showDeleteModal = signal(false);
 
-  userRole = signal<string>(this.getInitialRole());
+  userRole = signal<string>('USER');
   isAdmin = computed(() => {
     const role = this.userRole().toUpperCase();
     const hasAdminRole = role.includes('ADMIN') || role.includes('GESTOR') || role.includes('ROOT') || role.includes('MANAGER');
@@ -31,48 +31,19 @@ export class CustomerDetailComponent implements OnInit {
     // Si el rol es explícitamente USER o similar, NO es admin
     if (role === 'USER' || role === 'CLIENT' || role === 'CUSTOMER') return false;
 
-    // Si no hay un clientId específico en el storage, probablemente somos un admin gestionando todo
-    const noClientRestricted = !localStorage.getItem('clientId') && !sessionStorage.getItem('clientId');
-    return noClientRestricted;
+    // Por defecto en detalle, si no es admin, no tiene permisos administrativos
+    return false;
   });
 
-  private getInitialRole(): string {
-    const rawRole = localStorage.getItem('userRole') ||
-                    localStorage.getItem('role') ||
-                    localStorage.getItem('user_role') ||
-                    localStorage.getItem('roleName');
-    if (rawRole) return rawRole.trim().toUpperCase();
-
-    const sessionRole = sessionStorage.getItem('userRole') || sessionStorage.getItem('role');
-    if (sessionRole) return sessionRole.trim().toUpperCase();
-
-    try {
-      const userData = localStorage.getItem('user') || sessionStorage.getItem('user') ||
-                       localStorage.getItem('auth') || sessionStorage.getItem('auth');
-      if (userData) {
-        const user = JSON.parse(userData);
-        const data = user.user || user.data || user;
-        const roleValue = data.role || data.userRole || data.type || data.roleName || data.roles?.[0] || data.roleId;
-        if (roleValue) return roleValue.toString().trim().toUpperCase();
-      }
-    } catch (e) {}
-
-    try {
-      const cookies = document.cookie.split(';');
-      for (let c of cookies) {
-        const parts = c.trim().split('=');
-        if (parts.length === 2) {
-          const key = parts[0];
-          const value = parts[1];
-          if (key === 'role' || key === 'userRole') return decodeURIComponent(value).trim().toUpperCase();
-        }
-      }
-    } catch (e) {}
-
-    return 'USER';
-  }
 
   ngOnInit(): void {
+    // Obtenemos el rol desde la Shell a través de queryParams (Requerimiento MFE)
+    this.route.queryParams.subscribe(params => {
+      const role = params['role'] || 'USER';
+      this.userRole.set(role.toUpperCase());
+      console.log('Datos recibidos del Shell en Detalle:', { role: this.userRole() });
+    });
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.loadCustomer(id);
