@@ -23,10 +23,26 @@ export class CustomersListComponent implements OnInit {
   loading = signal<boolean>(false);
   showDeleteModal = signal<boolean>(false);
   deleteId = signal<string>('');
-  userRole = signal<string>((localStorage.getItem('userRole') || 'USER').trim().toUpperCase());
+  userRole = signal<string>(this.getInitialRole());
   currentClientId = signal<string | null>(localStorage.getItem('clientId'));
 
   isAdmin = computed(() => this.userRole() === 'ADMIN');
+
+  private getInitialRole(): string {
+    const rawRole = localStorage.getItem('userRole') || localStorage.getItem('role');
+    if (rawRole) return rawRole.trim().toUpperCase();
+
+    try {
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        const user = JSON.parse(userData);
+        if (user && user.role) return user.role.toString().trim().toUpperCase();
+        if (user && user.userRole) return user.userRole.toString().trim().toUpperCase();
+      }
+    } catch (e) {}
+
+    return 'USER';
+  }
 
   filteredCustomers = computed(() => {
     let list = this.customers();
