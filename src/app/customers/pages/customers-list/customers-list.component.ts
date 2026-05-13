@@ -27,9 +27,11 @@ export class CustomersListComponent implements OnInit {
   deleteId = signal<string>('');
 
   // Datos sincronizados desde el Bridge
-  userRole = computed(() => (this.mfeBridge.sessionData().role || 'USER').toUpperCase());
+  userRole = computed(() => this.mfeBridge.sessionData().role?.toUpperCase() || null);
   currentClientId = computed(() => this.mfeBridge.sessionData().clientId);
   isRedirecting = signal<boolean>(false);
+
+  private initialLoadDone = false;
 
   constructor() {
     // Reaccionar a cambios en los datos de sesión sincronizados
@@ -37,11 +39,11 @@ export class CustomersListComponent implements OnInit {
       const role = this.userRole();
       const clientId = this.currentClientId();
 
-      if (role && clientId) {
-        console.log('[MFE] Datos sincronizados recibidos:', { role, clientId });
+      if (role && !this.initialLoadDone) {
+        this.initialLoadDone = true;
 
         // Si no es admin, redirigir directamente al detalle (Requerimiento previo)
-        if (!this.isAdmin()) {
+        if (!this.isAdmin() && clientId) {
           this.isRedirecting.set(true);
           this.goToDetail(clientId);
         } else {
@@ -52,7 +54,9 @@ export class CustomersListComponent implements OnInit {
   }
 
   isAdmin = computed(() => {
-    const role = this.userRole().toUpperCase();
+    const role = this.userRole();
+    if (!role) return false;
+
     const hasAdminRole = role.includes('ADMIN') || role.includes('GESTOR') || role.includes('ROOT') || role.includes('MANAGER');
 
     // Si detectamos un rol de administrador, tiene permisos totales
@@ -87,13 +91,12 @@ export class CustomersListComponent implements OnInit {
     // Escuchamos queryParams solo por si hay navegación interna,
     // pero el rol y clientId vienen del BridgeService.
     this.route.queryParams.subscribe(() => {
-      if (this.isAdmin() || !this.currentClientId()) {
-        this.loadCustomers();
-      }
+      // Evitamos llamar a loadCustomers aquí para no duplicar con el effect inicial
     });
   }
 
   loadCustomers(): void {
+    if (!this.userRole()) return;
     this.loading.set(true);
 
     // Si es USER, cargar solo su perfil específico
@@ -128,11 +131,8 @@ export class CustomersListComponent implements OnInit {
     // pero lo mantenemos para compatibilidad con el botón
   }
 
-  onStatusClick(event: MouseEvent, customer: Customer): void {
+  onStatusClick(event: MouseEvent): void {
     event.stopPropagation();
-    if (this.isAdmin()) {
-      this.toggleStatus(customer);
-    }
   }
 
   goToCreate(): void {
@@ -177,6 +177,7 @@ export class CustomersListComponent implements OnInit {
   }
 
   toggleStatus(customer: Customer): void {
+    if (!this.isAdmin()) return;
     const newStatus = !customer.status;
     this.customerService.patchCustomer({ status: newStatus }, customer.id).subscribe({
       next: () => {

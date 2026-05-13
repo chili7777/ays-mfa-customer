@@ -75,7 +75,7 @@
 
               <!-- Toggle de Activo (Abajo de ese, más junto) -->
               <div class="d-flex align-items-center gap-2" style="margin-top: -2px;">
-                <label class="switch" style="transform: scale(0.65); transform-origin: left center;" (click)="onStatusClick($event, customer)" [title]="isAdmin() ? (customer.status ? 'Desactivar' : 'Activar') : ''">
+                <label class="switch" style="transform: scale(0.65); transform-origin: left center;" (click)="onStatusClick($event)" [title]="isAdmin() ? (customer.status ? 'Desactivar' : 'Activar') : ''">
                   <input type="checkbox" [checked]="customer.status" [disabled]="!isAdmin()" (change)="toggleStatus(customer)">
                   <span class="slider"></span>
                 </label>
@@ -120,7 +120,7 @@
               <td class="text-secondary small">{{customer.phone}}</td>
               <td class="text-center">
                 <div class="d-flex align-items-center justify-content-center gap-2">
-                  <label class="switch" style="transform: scale(0.8);" (click)="onStatusClick($event, customer)">
+                  <label class="switch" style="transform: scale(0.8);" (click)="onStatusClick($event)">
                     <input type="checkbox" [checked]="customer.status" [disabled]="!isAdmin()" (change)="toggleStatus(customer)">
                     <span class="slider"></span>
                   </label>
