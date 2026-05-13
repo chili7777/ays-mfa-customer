@@ -741,3 +741,28 @@ input:disabled + .slider {
 @media (min-width: 768px) {
   .show-mobile-only { display: none !important; }
 }
+
+/* User Profile Summary - Vista simplificada para rol USER */
+.user-profile-summary {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 2rem;
+  border-radius: $border-radius-base;
+  background: rgba($theme-dark-surface, 0.4);
+  border: 1px solid transparent;
+  max-width: 500px;
+  margin: 0 auto;
+
+  &:hover {
+    background: rgba($theme-dark-surface, 0.6);
+    border-color: rgba($theme-dark-accent, 0.2);
+    transform: translateY(-4px);
+  }
+
+  .profile-avatar-large {
+    .material-icons {
+      font-size: 80px;
+      opacity: 0.9;
+    }
+  }
+}
