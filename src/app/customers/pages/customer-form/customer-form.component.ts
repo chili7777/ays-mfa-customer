@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomerService } from '../../services/customer.service';
 import { MfeBridgeService } from '../../../core/services/mfe-bridge.service';
+import { ErrorModelDto } from '../../../core/interfaces/error.interface';
 
 @Component({
   selector: 'app-customer-form',
@@ -98,15 +99,7 @@ export class CustomerFormComponent implements OnInit {
           setTimeout(() => this.goBack(), 1500);
         },
         error: (err: any) => {
-          console.error('Error al actualizar', err);
-          const errorMsg = err.error?.detail || err.error?.errors?.[0]?.businessMessage || err.error?.message || 'Error desconocido';
-
-          if (errorMsg.includes('identificación ya existe')) {
-            this.customerForm.get('identification')?.setErrors({ duplicate: true });
-            this.currentStep = 1; // Volver al primer paso para que vea el error
-          }
-
-          this.showErrorMessage('Error al actualizar el cliente: ' + errorMsg);
+          this.handleApiError(err, 'actualizar');
         }
       });
     } else {
@@ -116,18 +109,49 @@ export class CustomerFormComponent implements OnInit {
           setTimeout(() => this.goBack(), 1500);
         },
         error: (err: any) => {
-          console.error('Error al crear', err);
-          const errorMsg = err.error?.detail || err.error?.errors?.[0]?.businessMessage || err.error?.message || 'Error desconocido';
-
-          if (errorMsg.includes('identificación ya existe')) {
-            this.customerForm.get('identification')?.setErrors({ duplicate: true });
-            this.currentStep = 1; // Volver al primer paso para que vea el error
-          }
-
-          this.showErrorMessage('Error al crear el cliente: ' + errorMsg);
+          this.handleApiError(err, 'crear');
         }
       });
     }
+  }
+
+  private handleApiError(err: any, action: string): void {
+    console.error(`Error al ${action} cliente`, err);
+    const errorData: ErrorModelDto = err.error;
+
+    if (errorData && errorData.errors) {
+      errorData.errors.forEach(e => {
+        const techMessage = (e.message || '').toLowerCase();
+        const fields = Object.keys(this.customerForm.controls);
+
+        let mapped = false;
+        for (const field of fields) {
+          if (techMessage.includes(field.toLowerCase())) {
+            this.customerForm.get(field)?.setErrors({ serverError: e.businessMessage });
+            this.markStepForField(field);
+            mapped = true;
+            break;
+          }
+        }
+
+        if (!mapped) {
+          if (techMessage.includes('identificación') || techMessage.includes('dni') || techMessage.includes('cedula') || techMessage.includes('identification')) {
+            this.customerForm.get('identification')?.setErrors({ serverError: e.businessMessage });
+            this.currentStep = 1;
+            mapped = true;
+          }
+        }
+      });
+    }
+
+    const errorMsg = errorData?.detail || err.error?.message || `Error al ${action} el cliente`;
+    this.showErrorMessage(errorMsg);
+  }
+
+  private markStepForField(field: string): void {
+    if (['name', 'identification', 'gender', 'age'].includes(field)) this.currentStep = 1;
+    else if (['email', 'phone', 'address'].includes(field)) this.currentStep = 2;
+    else if (['password'].includes(field)) this.currentStep = 3;
   }
 
   private showErrorMessage(message: string): void {

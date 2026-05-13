@@ -61,6 +61,9 @@
             <div class="invalid-feedback animate-fade-in" *ngIf="f['name'].errors?.['minlength'] && f['name'].touched">
               Nombre debe tener al menos 3 caracteres
             </div>
+            <div class="invalid-feedback animate-fade-in" *ngIf="f['name'].errors?.['serverError'] && f['name'].touched">
+              {{ f['name'].errors?.['serverError'] }}
+            </div>
           </div>
 
           <div class="mb-4">
@@ -78,6 +81,9 @@
             </div>
             <div class="invalid-feedback animate-fade-in" *ngIf="f['identification'].errors?.['duplicate'] && f['identification'].touched">
               La identificación ya existe para otro cliente
+            </div>
+            <div class="invalid-feedback animate-fade-in" *ngIf="f['identification'].errors?.['serverError'] && f['identification'].touched">
+              {{ f['identification'].errors?.['serverError'] }}
             </div>
           </div>
 
@@ -106,6 +112,9 @@
             <div class="invalid-feedback animate-fade-in" *ngIf="(f['age'].errors?.['min'] || f['age'].errors?.['max']) && f['age'].touched">
               Edad debe estar entre 18 y 120 años
             </div>
+            <div class="invalid-feedback animate-fade-in" *ngIf="f['age'].errors?.['serverError'] && f['age'].touched">
+              {{ f['age'].errors?.['serverError'] }}
+            </div>
             </div>
           </div>
         </div>
@@ -125,6 +134,9 @@
             <div class="invalid-feedback animate-fade-in" *ngIf="f['email'].errors?.['email'] && f['email'].touched">
               Formato de email inválido
             </div>
+            <div class="invalid-feedback animate-fade-in" *ngIf="f['email'].errors?.['serverError'] && f['email'].touched">
+              {{ f['email'].errors?.['serverError'] }}
+            </div>
           </div>
 
           <div class="mb-4">
@@ -140,6 +152,9 @@
             <div class="invalid-feedback animate-fade-in" *ngIf="f['phone'].errors?.['pattern'] && f['phone'].touched">
               Debe ser numérico (10 dígitos)
             </div>
+            <div class="invalid-feedback animate-fade-in" *ngIf="f['phone'].errors?.['serverError'] && f['phone'].touched">
+              {{ f['phone'].errors?.['serverError'] }}
+            </div>
           </div>
 
           <div class="mb-4">
@@ -154,6 +169,9 @@
             </div>
             <div class="invalid-feedback animate-fade-in" *ngIf="f['address'].errors?.['minlength'] && f['address'].touched">
               Dirección muy corta
+            </div>
+            <div class="invalid-feedback animate-fade-in" *ngIf="f['address'].errors?.['serverError'] && f['address'].touched">
+              {{ f['address'].errors?.['serverError'] }}
             </div>
           </div>
         </div>
@@ -172,6 +190,9 @@
             </div>
             <div class="invalid-feedback animate-fade-in" *ngIf="f['password'].errors?.['minlength'] && f['password'].touched">
               Mínimo 6 caracteres
+            </div>
+            <div class="invalid-feedback animate-fade-in" *ngIf="f['password'].errors?.['serverError'] && f['password'].touched">
+              {{ f['password'].errors?.['serverError'] }}
             </div>
           </div>
 

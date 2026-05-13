@@ -1,66 +1,75 @@
-# ays-mfa-customer
-Angular micro-frontend for MFA customer features.
-The app renders:
-- `ays-mfa-customer`
-- `Micro-frontend loaded successfully.`
-It is containerized for deployment in DigitalOcean App Platform and served by Nginx on port `80` with SPA fallback to `index.html`.
-## Prerequisites
-- Node.js and npm
-- Docker
-- A GitHub account with access to GHCR (`ghcr.io`)
-## Install dependencies
+# ays-mfa-customer (Micro-frontend de Gestión de Clientes)
+
+Este proyecto es un Micro-frontend (MFE) desarrollado con Angular, encargado de la gestión de clientes dentro del ecosistema **AYS**.
+
+## 🚀 Cómo correr el proyecto
+
+### Requisitos previos
+- **Node.js**: v20+ (recomendado)
+- **npm**: v10+
+- **Docker**: (Opcional, para ejecución en contenedores)
+
+### Desarrollo Local
+1. Instalar dependencias:
+   ```bash
+   npm install
+   ```
+2. Iniciar el servidor de desarrollo:
+   ```bash
+   npm start
+   ```
+   El proyecto estará disponible en `http://localhost:5002`.
+
+### Ejecución con Docker
+Para simular el entorno de producción localmente:
 ```bash
-npm install
+docker-compose up --build
 ```
-## Production build
-```bash
-npm run build -- --configuration production
-```
-Build output is generated in `dist/ays-mfa-customer/browser`.
-## Docker build
-```bash
-docker build -f deploy/Dockerfile -t ghcr.io/chili7777/ays-mfa-customer:staging-latest .
-```
-## Docker run local
-```bash
-docker run --rm -p 8082:80 ghcr.io/chili7777/ays-mfa-customer:staging-latest
-```
-Open `http://localhost:8082`.
-## Docker Compose run local
-```bash
-docker compose up --build
-```
-Stop the container:
-```bash
-docker compose down
-```
-## GHCR push
-```bash
-docker login ghcr.io
-docker push ghcr.io/chili7777/ays-mfa-customer:staging-latest
-```
-## DigitalOcean App Platform setup
-Create a new app using **Container Image**:
-1. Source type: `Container Image`
-2. Registry provider: `GitHub Container Registry`
-3. Repository: `chili7777/ays-mfa-customer`
-4. Tag: `staging-latest`
-5. HTTP Port: `80`
-6. Health check path: `/`
-After deploy, set this env var in the shell app:
-- `AYS_MFA_CUSTOMER_URL=https://<your-ays-mfa-customer-domain>`
-Then redeploy the shell app.
-## GitHub Actions deployment workflow
-This repo includes `.github/workflows/deploy-branches.yml`.
-Push behavior:
-- `feature/**` -> `staging`
-- `develop` -> `development`
-- `main` or `master` -> `production`
-Required repository secrets:
-- `DIGITALOCEAN_ACCESS_TOKEN`
-- `DO_APP_ID_STAGING`
-- `DO_APP_ID_DEVELOPMENT`
-- `DO_APP_ID_PRODUCTION`
-## Project deployment files
-- `deploy/Dockerfile`: multi-stage build (Node build + Nginx runtime)
-- `deploy/nginx.conf`: SPA fallback (`try_files $uri $uri/ /index.html`)
+El MFE será accesible en `http://localhost:8082`.
+
+---
+
+## 🏗️ Arquitectura
+
+Este proyecto sigue una arquitectura de **Micro-frontends**. No está diseñado para funcionar de forma aislada, sino para ser consumido por una **Shell Application** (Contenedor principal).
+
+### Componentes Clave:
+- **MfeBridgeService**: Es el núcleo de la comunicación. Utiliza el protocolo `window.postMessage` para:
+  - Recibir datos de sesión (token, rol, usuario) desde la Shell.
+  - Notificar a la Shell cuando el MFE está listo (`MFE_READY`).
+  - Solicitar navegaciones inter-MFE (ej. navegar a la sección de "Cuentas" que reside en otro MFE).
+- **Angular 19+**: Utiliza las últimas características de Angular como **Signals** para la gestión de estado reactiva y componentes independientes (Standalone).
+- **Estilos**: Sistema de diseño basado en SCSS con soporte para temas oscuros y utilidades personalizadas (en `src/styles.scss`).
+
+### Flujo de Navegación:
+Cuando un usuario hace clic en un cliente para ver sus cuentas, el MFE solicita a la Shell realizar el cambio de contexto pasando los parámetros necesarios (como `clientId`).
+
+---
+
+## 💡 Qué se debe tener en cuenta
+
+1. **Puerto de Desarrollo**: El puerto asignado es el `5002`. Este puerto debe coincidir con lo configurado en la Shell para la carga del MFE.
+2. **Seguridad de Origen**: El `MfeBridgeService` valida que los mensajes provengan de orígenes de confianza (localhost o dominios `.ondigitalocean.app`) para prevenir ataques de inyección de mensajes.
+3. **Roles y Permisos**: Las funcionalidades administrativas (Editar, Eliminar, Cambiar estado) dependen del rol recibido en los datos de sesión.
+4. **Navegación Preservada**: Se utilizan estrategias de `queryParamsHandling: 'preserve' | 'merge'` para mantener los tokens y contexto de la sesión durante la navegación.
+5. **Proxy**: Existe un archivo `proxy.conf.json` para evitar problemas de CORS durante el desarrollo local al apuntar a APIs externas.
+
+---
+
+## 🌐 Despliegue
+
+El proyecto está configurado para desplegarse automáticamente en **Digital Ocean App Platform**.
+
+- **URL Principal (Shell/Login)**: [https://ays-shl-account-manage-35jnj.ondigitalocean.app/login](https://ays-shl-account-manage-35jnj.ondigitalocean.app/login)
+- **Infraestructura**:
+  - **Servidor Web**: Nginx 1.27 (Alpine) configurado para aplicaciones SPA.
+  - **CI/CD**: GitHub Actions gestiona los builds y despliegues por rama (`main` -> producción).
+  - **Registro de Imágenes**: GitHub Container Registry (GHCR).
+
+---
+
+## 🛠️ Comandos Útiles
+
+- **Build de producción**: `npm run build`
+- **Linting**: `npm run lint` (si está configurado)
+- **Pruebas unitarias**: `npm test` (usa Vitest)

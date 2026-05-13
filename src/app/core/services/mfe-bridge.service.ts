@@ -81,6 +81,25 @@ export class MfeBridgeService {
     }, '*');
   }
 
+  /**
+   * Notifica a la Shell que el usuario debe cerrar sesión.
+   */
+  logout() {
+    console.log('[MFE Bridge] Solicitando LOGOUT a la Shell');
+    window.parent.postMessage({ type: 'MFE_LOGOUT' }, '*');
+  }
+
+  /**
+   * Solicita a la Shell mostrar una notificación.
+   */
+  showNotification(payload: { title: string, message: string, type: 'error' | 'success' | 'warning' | 'info' }) {
+    console.log('[MFE Bridge] Solicitando NOTIFICACIÓN a la Shell:', payload);
+    window.parent.postMessage({
+      type: 'MFE_SHOW_NOTIFICATION',
+      payload
+    }, '*');
+  }
+
   private isTrustedOrigin(origin: string): boolean {
     // En producción esto debería ser más estricto
     return this.trustedOrigins.includes(origin) ||

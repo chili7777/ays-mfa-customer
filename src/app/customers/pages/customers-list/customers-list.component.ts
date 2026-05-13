@@ -165,11 +165,9 @@ export class CustomersListComponent implements OnInit {
         next: () => {
           this.customers.update(prev => prev.filter(c => c.id !== id));
           this.showDeleteModal.set(false);
-          alert('Cliente eliminado con éxito');
         },
         error: (err: any) => {
           console.error('Error al eliminar', err);
-          alert('No se pudo eliminar el cliente. Verifique si tiene cuentas asociadas.');
           this.showDeleteModal.set(false);
         }
       });
@@ -187,7 +185,6 @@ export class CustomersListComponent implements OnInit {
       },
       error: (err: any) => {
         console.error('Error al actualizar estado', err);
-        alert('No se pudo actualizar el estado del cliente.');
       }
     });
   }
