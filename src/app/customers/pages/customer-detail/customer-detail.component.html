@@ -19,8 +19,8 @@
           <span class="fw-medium small" [style.color]="c.status ? '#00c076' : '#d41020'">
             {{ c.status ? 'Cliente Activo' : 'Cliente Inactivo' }}
           </span>
-          <label class="switch" style="transform: scale(0.8);" [title]="c.status ? 'Desactivar cuenta' : 'Activar cuenta'">
-            <input type="checkbox" [checked]="c.status" (change)="toggleStatus()">
+          <label class="switch" style="transform: scale(0.8);" [title]="isAdmin() ? (c.status ? 'Desactivar cuenta' : 'Activar cuenta') : ''">
+            <input type="checkbox" [checked]="c.status" [disabled]="!isAdmin()" (change)="toggleStatus()">
             <span class="slider"></span>
           </label>
         </div>
@@ -111,7 +111,7 @@
             <span class="material-icons" style="font-size: 18px;">edit</span>
             <span class="d-none d-lg-inline">Editar</span>
           </button>
-          <button class="btn btn-danger flex-grow-1" (click)="showDeleteModal.set(true)">
+          <button *ngIf="isAdmin()" class="btn btn-danger flex-grow-1" (click)="showDeleteModal.set(true)">
             <span class="material-icons" style="font-size: 18px;">delete</span>
             <span class="d-none d-lg-inline">Eliminar</span>
           </button>
