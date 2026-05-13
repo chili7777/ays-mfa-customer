@@ -1,0 +1,153 @@
+<div class="container py-4 d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+  <div class="w-100 animate-fade-in position-relative" style="max-width: 500px;">
+
+    <header class="mb-5 text-center mt-4 position-relative">
+      <button *ngIf="isAdmin()" class="btn btn-icon position-absolute" (click)="goBack()" title="Volver" style="left: 0; top: 0; color: var(--accent-color);">
+        <span class="material-icons">arrow_back</span>
+      </button>
+      <div class="d-inline-flex p-3 rounded-circle mb-3" style="color: var(--accent-color);">
+        <span class="material-icons" style="font-size: 32px;">person</span>
+      </div>
+      <h1 class="h3 mb-2 fw-bold">
+        Ficha del Cliente
+        <span class="text-secondary small ms-2" style="font-size: 14px; opacity: 0.7; font-weight: 400;">({{ userRole() }})</span>
+      </h1>
+      <p class="text-secondary px-4 mb-3">
+        {{ customer()?.name || 'Información detallada' }}
+      </p>
+
+      @if (customer(); as c) {
+        <div class="d-flex justify-content-center align-items-center gap-3 animate-fade-in mb-2">
+          <span [class]="c.status ? 'status-dot active' : 'status-dot'"></span>
+          <span class="fw-medium small" [style.color]="c.status ? '#00c076' : '#d41020'">
+            {{ c.status ? 'Cliente Activo' : 'Cliente Inactivo' }}
+          </span>
+          <label *ngIf="isAdmin()" class="switch" style="transform: scale(0.8);" [title]="c.status ? 'Desactivar cuenta' : 'Activar cuenta'">
+            <input type="checkbox" [checked]="c.status" (change)="toggleStatus()">
+            <span class="slider"></span>
+          </label>
+        </div>
+      }
+    </header>
+
+    @if (loading()) {
+      <div class="surface-alt p-5 shadow-sm text-center">
+        <div class="modern-loader mx-auto mb-4">
+          <div class="ring"></div>
+          <div class="ring"></div>
+          <div class="ring"></div>
+          <div class="core"></div>
+        </div>
+        <p class="loading-text mb-0">Obteniendo datos...</p>
+      </div>
+    } @else if (errorMessage()) {
+      <div class="surface-alt p-5 shadow-sm text-center">
+        <div class="empty-icon-container mx-auto mb-4" style="border-color: rgba(212, 16, 32, 0.2); width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid;">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 8V12" stroke="var(--error-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 16.01L12.01 15.9989" stroke="var(--error-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9.17001 4L4 12.83C3.59 13.59 3.59 14.51 4 15.27C4.41 16.03 5.22 16.5 6.09 16.5H17.91C18.78 16.5 19.59 16.03 20 15.27C20.41 14.51 20.41 13.59 20 12.83L14.83 4C14.41 3.27 13.62 2.82 12.78 2.82C11.94 2.82 11.15 3.27 10.73 4H9.17001Z" stroke="var(--error-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.2"/>
+          </svg>
+        </div>
+        <h3 class="text-danger h5 mb-2">Error de Conexión</h3>
+        <p class="text-secondary small mb-4">{{errorMessage()}}</p>
+        <button *ngIf="isAdmin()" class="btn btn-secondary w-100" (click)="goBack()">
+          <span class="material-icons d-lg-none" style="font-size: 18px; color: var(--accent-color);">arrow_back</span>
+          <span class="d-none d-lg-inline">Volver al listado</span>
+        </button>
+      </div>
+    } @else if (customer(); as c) {
+      <div class="surface-alt p-4 shadow-sm">
+        <div class="mb-4">
+          <label class="text-secondary small d-flex align-items-center gap-2 mb-2">
+            <span class="material-icons" style="font-size: 14px; opacity: 0.5;">badge</span>
+            Identificación
+          </label>
+          <div class="form-control" style="border-bottom-color: rgba(43, 49, 57, 0.3);">{{c.identification}}</div>
+        </div>
+
+        <div class="mb-4">
+          <label class="text-secondary small d-flex align-items-center gap-2 mb-2">
+            <span class="material-icons" style="font-size: 14px; opacity: 0.5;">email</span>
+            Correo Electrónico
+          </label>
+          <div class="form-control" style="border-bottom-color: rgba(43, 49, 57, 0.3);">{{c.email}}</div>
+        </div>
+
+        <div class="row">
+          <div class="col-6 mb-4">
+            <label class="text-secondary small d-flex align-items-center gap-2 mb-2">
+              <span class="material-icons" style="font-size: 14px; opacity: 0.5;">wc</span>
+              Género
+            </label>
+            <div class="form-control" style="border-bottom-color: rgba(43, 49, 57, 0.3);">
+              {{c.gender === 'MALE' ? 'Masculino' : c.gender === 'FEMALE' ? 'Femenino' : 'Otro'}}
+            </div>
+          </div>
+          <div class="col-6 mb-4">
+            <label class="text-secondary small d-flex align-items-center gap-2 mb-2">
+              <span class="material-icons" style="font-size: 14px; opacity: 0.5;">cake</span>
+              Edad
+            </label>
+            <div class="form-control" style="border-bottom-color: rgba(43, 49, 57, 0.3);">{{c.age}} años</div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="text-secondary small d-flex align-items-center gap-2 mb-2">
+            <span class="material-icons" style="font-size: 14px; opacity: 0.5;">phone</span>
+            Teléfono de Contacto
+          </label>
+          <div class="form-control" style="border-bottom-color: rgba(43, 49, 57, 0.3);">{{c.phone}}</div>
+        </div>
+
+        <div class="mb-4">
+          <label class="text-secondary small d-flex align-items-center gap-2 mb-2">
+            <span class="material-icons" style="font-size: 14px; opacity: 0.5;">location_on</span>
+            Dirección de Domicilio
+          </label>
+          <div class="form-control" style="border-bottom-color: rgba(43, 49, 57, 0.3);">{{c.address}}</div>
+        </div>
+
+        <div class="mt-5 d-flex gap-3">
+          <button class="btn btn-primary flex-grow-1 d-flex align-items-center justify-content-center gap-2" (click)="goToAccounts()">
+            <span class="material-icons" style="font-size: 18px;">account_balance</span>
+            <span>Ver Cuentas</span>
+          </button>
+          <button class="btn btn-warning flex-grow-1 d-flex align-items-center justify-content-center gap-2" (click)="goToEdit()">
+            <span class="material-icons" style="font-size: 18px;">edit</span>
+            <span class="d-none d-lg-inline">Editar</span>
+          </button>
+          <button *ngIf="isAdmin()" class="btn btn-danger flex-grow-1 d-flex align-items-center justify-content-center gap-2" (click)="showDeleteModal.set(true)">
+            <span class="material-icons" style="font-size: 18px;">delete</span>
+            <span class="d-none d-lg-inline">Eliminar</span>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Delete Modal (keeping same functionality but matching style) -->
+<div *ngIf="showDeleteModal()" class="animate-fade-in" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px);">
+  <div class="surface-alt p-4 mx-3 w-100 shadow-lg" style="max-width: 400px; border-radius: 12px;">
+    <div class="text-center mb-4">
+      <div class="d-inline-flex p-3 rounded-circle mb-3" style="color: var(--error-color); background: rgba(212, 16, 32, 0.1);">
+        <span class="material-icons" style="font-size: 32px;">warning</span>
+      </div>
+      <h3 class="h5 fw-bold mb-2">Eliminar cliente</h3>
+      <p class="text-secondary small">¿Estás seguro de que deseas eliminar este cliente? Esta acción es irreversible.</p>
+    </div>
+
+    <div class="d-flex gap-3">
+      <button class="btn btn-secondary flex-grow-1" (click)="showDeleteModal.set(false)">
+        <span class="material-icons d-lg-none" style="font-size: 18px;">close</span>
+        <span class="d-none d-lg-inline">Cancelar</span>
+      </button>
+      <button class="btn btn-danger flex-grow-1" (click)="onDelete()">
+        <span class="material-icons d-lg-none" style="font-size: 18px;">delete</span>
+        <span class="d-none d-lg-inline">Eliminar</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -53,3 +53,9 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Logs
+.output.txt
+
+# Custom instructions (Local only)
+custom-instructions/

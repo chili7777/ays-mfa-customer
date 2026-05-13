@@ -1,0 +1,227 @@
+<div class="container py-4" *ngIf="!isRedirecting()">
+  <div class="desktop-card shadow-sm animate-fade-in">
+    <!-- Section Búsqueda - Minimalista (Basado en accounts) -->
+    <section class="search-section mb-4" *ngIf="isAdmin()">
+      <div class="d-flex gap-2">
+        <div class="position-relative w-100">
+          <span class="material-icons position-absolute top-50 translate-middle-y ms-3 text-secondary" style="font-size: 18px;">search</span>
+          <input
+            type="text"
+            class="form-control ps-5"
+            placeholder="Buscar cliente (nombre, ID o email)..."
+            [formControl]="searchControl"
+            (keyup.enter)="onSearch()"
+          >
+        </div>
+        <button class="btn btn-primary d-flex align-items-center gap-1" type="button" (click)="onSearch()">
+          <span class="material-icons">search</span>
+          <span class="d-none d-md-inline">Buscar</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="list-section">
+      <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+        <h2 class="h5 mb-0">
+          {{ isAdmin() ? 'Gestión de Clientes' : 'Mi Perfil' }}
+          <span class="text-secondary small ms-2" style="font-size: 12px; opacity: 0.7; font-weight: 400;">({{ userRole() }})</span>
+        </h2>
+        <button *ngIf="isAdmin()" class="btn btn-success d-flex align-items-center px-2 px-md-4" type="button" (click)="goToCreate()" title="Nuevo Cliente" id="btn-create-customer-main">
+          <span class="material-icons">add</span>
+          <span class="ms-1 d-none d-md-inline">Nuevo Cliente</span>
+        </button>
+      </div>
+
+      <div *ngIf="loading()" class="spinner-container py-5">
+        <div class="modern-loader">
+          <div class="ring"></div>
+          <div class="ring"></div>
+          <div class="ring"></div>
+          <div class="core"></div>
+        </div>
+        <p class="loading-text mb-0">Cargando clientes...</p>
+      </div>
+
+      <!-- Vista de Móvil: Lista minimalista (Solo Admin) -->
+      <div class="show-mobile-only" *ngIf="!loading() && isAdmin()">
+        <div class="px-3" *ngFor="let customer of filteredCustomers()">
+          <div class="py-3 d-flex justify-content-between align-items-center" style="border-bottom: 1px solid var(--border-color, rgba(43, 49, 57, 0.5));">
+            <div class="flex-grow-1 cursor-pointer" (click)="goToAccounts(customer.id)">
+              <!-- Nombre y Luz de Estado (No quitar luz verde o roja) -->
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <span [class]="customer.status ? 'status-dot active' : 'status-dot'"></span>
+                <span class="fw-bold text-truncate" style="max-width: 250px;">{{customer.name}}</span>
+              </div>
+
+              <!-- Cédula y Teléfono (Juntos) -->
+              <div class="d-flex align-items-center gap-3 mb-0">
+                <span class="text-secondary small d-flex align-items-center gap-1">
+                  <span class="material-icons" style="font-size: 14px; opacity: 0.5;">badge</span>
+                  {{customer.identification}}
+                </span>
+                <span class="text-secondary small d-flex align-items-center gap-1">
+                  <span class="material-icons" style="font-size: 14px; opacity: 0.5;">phone</span>
+                  {{customer.phone}}
+                </span>
+              </div>
+
+              <!-- Correo (Abajo de los dos) -->
+              <div class="mb-1">
+                <span class="text-secondary small d-flex align-items-center gap-1">
+                  <span class="material-icons" style="font-size: 14px; opacity: 0.5;">email</span>
+                  {{customer.email}}
+                </span>
+              </div>
+
+              <!-- Toggle de Activo (Abajo de ese, más junto) -->
+              <div class="d-flex align-items-center gap-2" style="margin-top: -2px;">
+                <label class="switch" style="transform: scale(0.65); transform-origin: left center;" (click)="onStatusClick($event, customer)" [title]="isAdmin() ? (customer.status ? 'Desactivar' : 'Activar') : ''">
+                  <input type="checkbox" [checked]="customer.status" [disabled]="!isAdmin()" (change)="toggleStatus(customer)">
+                  <span class="slider"></span>
+                </label>
+                <span class="small fw-medium" [style.color]="customer.status ? '#00c076' : '#848e9c'" style="font-size: 11px; margin-left: -8px;">
+                  {{customer.status ? 'Activo' : 'Inactivo'}}
+                </span>
+              </div>
+            </div>
+            <div class="d-flex flex-column align-items-center gap-2">
+              <span class="material-icons text-secondary cursor-pointer" (click)="goToAccounts(customer.id)" title="Ver Cuentas">chevron_right</span>
+              <button class="btn-icon text-primary" (click)="goToDetail(customer.id)" title="Ver Detalle">
+                <span class="material-icons" style="font-size: 20px;">visibility</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vista de Escritorio/Tablet: Tabla completa (Solo Admin) -->
+      <div class="hide-mobile" *ngIf="!loading() && isAdmin()">
+        <table class="table">
+          <thead>
+            <tr>
+              <th><span class="grayscale-emoji">👤</span> Nombre</th>
+              <th><span class="grayscale-emoji">🆔</span> Identificación</th>
+              <th><span class="grayscale-emoji">📧</span> Email</th>
+              <th><span class="grayscale-emoji">📱</span> Teléfono</th>
+              <th class="text-center"><span class="grayscale-emoji">⚙️</span> Estado</th>
+              <th class="text-end" style="width: 120px;" *ngIf="isAdmin()"><span class="grayscale-emoji">🛠️</span> Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let customer of filteredCustomers()" (click)="goToAccounts(customer.id)" class="cursor-pointer">
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <span [class]="customer.status ? 'status-dot active' : 'status-dot'"></span>
+                  <span class="fw-bold">{{customer.name}}</span>
+                </div>
+              </td>
+              <td class="small text-secondary">{{customer.identification}}</td>
+              <td class="small text-secondary">{{customer.email}}</td>
+              <td class="text-secondary small">{{customer.phone}}</td>
+              <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center gap-2">
+                  <label class="switch" style="transform: scale(0.8);" (click)="onStatusClick($event, customer)">
+                    <input type="checkbox" [checked]="customer.status" [disabled]="!isAdmin()" (change)="toggleStatus(customer)">
+                    <span class="slider"></span>
+                  </label>
+                  <span class="small fw-medium" [style.color]="customer.status ? '#00c076' : '#848e9c'" style="min-width: 55px; text-align: left;">
+                    {{customer.status ? 'Activo' : 'Inactivo'}}
+                  </span>
+                </div>
+              </td>
+              <td class="text-end" *ngIf="isAdmin()">
+                <div class="d-flex justify-content-end gap-2">
+                  <button class="btn btn-primary btn-sm d-flex align-items-center gap-1" (click)="$event.stopPropagation(); goToDetail(customer.id)" title="Ver Detalle">
+                    <span class="material-icons" style="font-size: 16px;">visibility</span>
+                    <span class="d-none d-md-inline">Detalle</span>
+                  </button>
+                  <button class="btn btn-info btn-sm d-flex align-items-center gap-1 text-white" (click)="$event.stopPropagation(); goToAccounts(customer.id)" title="Ver Cuentas">
+                    <span class="material-icons" style="font-size: 16px;">account_balance</span>
+                    <span class="d-none d-md-inline">Cuentas</span>
+                  </button>
+                  <button class="btn btn-warning btn-sm d-flex align-items-center gap-1" (click)="$event.stopPropagation(); goToEdit(customer.id)" title="Editar">
+                    <span class="material-icons" style="font-size: 16px;">edit</span>
+                    <span class="d-none d-md-inline">Editar</span>
+                  </button>
+                  <button class="btn btn-danger btn-sm d-flex align-items-center gap-1" (click)="$event.stopPropagation(); confirmDelete(customer.id)" title="Eliminar">
+                    <span class="material-icons" style="font-size: 16px;">delete</span>
+                    <span class="d-none d-md-inline">Eliminar</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Vista de Usuario (No Admin): Solo muestra el nombre -->
+      <div *ngIf="!loading() && !isAdmin()" class="py-5 text-center animate-fade-in">
+        <div *ngIf="filteredCustomers().length > 0" (click)="goToAccounts(filteredCustomers()[0].id)" class="user-profile-summary">
+          <div class="profile-avatar-large mb-3">
+            <span class="material-icons text-primary">account_circle</span>
+          </div>
+          <h1 class="display-6 fw-bold mb-1">{{ filteredCustomers()[0].name }}</h1>
+          <p class="text-secondary">Bienvenido a su portal de cliente. Haga clic para ver sus cuentas.</p>
+          <div class="d-flex justify-content-center gap-2 mt-3">
+            <button class="btn btn-secondary" (click)="$event.stopPropagation(); goToDetail(filteredCustomers()[0].id)">Ver Detalle</button>
+            <button class="btn btn-primary" (click)="$event.stopPropagation(); goToAccounts(filteredCustomers()[0].id)">Ver Cuentas</button>
+          </div>
+        </div>
+
+        <div *ngIf="filteredCustomers().length === 0" class="py-4">
+          <p class="text-secondary italic">Cargando información de su perfil...</p>
+        </div>
+      </div>
+
+      <div *ngIf="!loading() && filteredCustomers().length === 0 && isAdmin()" class="empty-state">
+        <div class="empty-icon-container">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.2"/>
+            <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.2"/>
+            <path d="M23 21V19C22.9993 18.1137 22.7044 17.2524 22.1614 16.5523C21.6184 15.8522 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--warning-color)"/>
+            <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89317 18.7122 8.75608 18.1676 9.45768C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--warning-color)"/>
+          </svg>
+        </div>
+        <h3>No se encontraron clientes</h3>
+        <p>Intenta ajustar tu búsqueda o crea un nuevo cliente para comenzar a gestionar tus usuarios.</p>
+
+        <!-- Botón de acción en estado vacío (Solo Admin) -->
+        <div class="mt-4" *ngIf="isAdmin()">
+          <button class="btn btn-success d-flex align-items-center gap-2 mx-auto px-2 px-md-4 py-2" (click)="goToCreate()">
+            <span class="material-icons">person_add</span>
+            <span class="d-none d-md-inline">+ Nuevo Cliente</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- Pantalla de Redirección -->
+<div *ngIf="isRedirecting()" class="spinner-container py-5" style="height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+  <div class="modern-loader">
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="core"></div>
+  </div>
+  <p class="loading-text mt-3" style="color: #848e9c; font-weight: 500;">Cargando tu perfil...</p>
+</div>
+
+<!-- Modal de Eliminación - Estilo Surface -->
+<div *ngIf="showDeleteModal()" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px);">
+  <div class="surface mx-3" style="width: 100%; max-width: 400px;">
+    <h3 class="h5 mb-3">Eliminar cliente</h3>
+    <p class="text-secondary mb-4">¿Estás seguro de que deseas eliminar este cliente permanentemente?</p>
+    <div class="d-flex justify-content-end gap-2">
+      <button class="btn btn-secondary" (click)="showDeleteModal.set(false)">
+        <span class="material-icons d-lg-none" style="font-size: 18px;">close</span>
+        <span class="d-none d-lg-inline">Cancelar</span>
+      </button>
+      <button class="btn btn-danger" (click)="onDelete()">
+        <span class="material-icons d-lg-none" style="font-size: 18px;">delete</span>
+        <span class="d-none d-lg-inline">Eliminar</span>
+      </button>
+    </div>
+  </div>
+</div>
