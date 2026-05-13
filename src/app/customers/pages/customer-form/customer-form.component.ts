@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,6 +19,7 @@ export class CustomerFormComponent implements OnInit {
   customerForm: FormGroup;
   isEdit = false;
   customerId: string | null = null;
+  userRole = signal<string>('USER');
   currentStep = 1;
   totalSteps = 3;
 
@@ -40,6 +41,13 @@ export class CustomerFormComponent implements OnInit {
   get f() { return this.customerForm.controls; }
 
   ngOnInit(): void {
+    // Obtenemos el rol desde la Shell a través de queryParams
+    this.route.queryParams.subscribe(params => {
+      const role = params['role'] || 'USER';
+      this.userRole.set(role);
+      console.log('Datos recibidos del Shell en Formulario:', { role: this.userRole() });
+    });
+
     this.customerId = this.route.snapshot.paramMap.get('id');
     if (this.customerId) {
       this.isEdit = true;
@@ -141,6 +149,6 @@ export class CustomerFormComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/customers']);
+    this.router.navigate(['/customers'], { queryParamsHandling: 'preserve' });
   }
 }

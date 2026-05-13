@@ -7,7 +7,10 @@
       <div class="d-inline-flex p-3 rounded-circle mb-3" style="color: var(--accent-color);">
         <span class="material-icons" style="font-size: 32px;">person_add</span>
       </div>
-      <h1 class="h3 mb-2 fw-bold">{{isEdit ? 'Actualizar Información' : 'Registro de Cliente'}}</h1>
+      <h1 class="h3 mb-2 fw-bold">
+        {{isEdit ? 'Actualizar Información' : 'Registro de Cliente'}}
+        <span class="text-secondary small ms-2" style="font-size: 14px; opacity: 0.7; font-weight: 400;">({{ userRole() }})</span>
+      </h1>
       <p class="text-secondary px-4">
         {{
           currentStep === 1 ? 'Paso 1: Información Personal' :

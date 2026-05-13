@@ -40,7 +40,7 @@ export class CustomerDetailComponent implements OnInit {
     // Obtenemos el rol desde la Shell a través de queryParams (Requerimiento MFE)
     this.route.queryParams.subscribe(params => {
       const role = params['role'] || 'USER';
-      this.userRole.set(role.toUpperCase());
+      this.userRole.set(role); // Rol tal cual viene del Shell
       console.log('Datos recibidos del Shell en Detalle:', { role: this.userRole() });
     });
 
@@ -70,7 +70,7 @@ export class CustomerDetailComponent implements OnInit {
   goToEdit(): void {
     const current = this.customer();
     if (current) {
-      this.router.navigate(['/customers/edit', current.id]);
+      this.router.navigate(['/customers/edit', current.id], { queryParamsHandling: 'preserve' });
     }
   }
 
@@ -98,7 +98,7 @@ export class CustomerDetailComponent implements OnInit {
       this.customerService.deleteCustomer(current.id).subscribe({
         next: () => {
           this.showDeleteModal.set(false);
-          this.router.navigate(['/customers']);
+          this.router.navigate(['/customers'], { queryParamsHandling: 'preserve' });
         },
         error: (err: any) => {
           this.errorMessage.set('No se pudo eliminar el cliente. Verifique dependencias.');
@@ -109,6 +109,6 @@ export class CustomerDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/customers']);
+    this.router.navigate(['/customers'], { queryParamsHandling: 'preserve' });
   }
 }

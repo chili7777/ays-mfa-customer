@@ -65,7 +65,7 @@ export class CustomersListComponent implements OnInit {
       const role = params['role'] || 'USER';
       const cid = params['clientId'] || params['client'] || null;
 
-      this.userRole.set(role.toUpperCase());
+      this.userRole.set(role); // Guardamos el rol tal cual viene para la UI
       this.currentClientId.set(cid);
 
       console.log('Datos recibidos del Shell:', { role: this.userRole(), id: this.currentClientId() });
@@ -132,15 +132,15 @@ export class CustomersListComponent implements OnInit {
   }
 
   goToCreate(): void {
-    this.router.navigate(['/customers/create']);
+    this.router.navigate(['/customers/create'], { queryParamsHandling: 'preserve' });
   }
 
   goToDetail(id: string): void {
-    this.router.navigate(['/customers/detail', id]);
+    this.router.navigate(['/customers/detail', id], { queryParamsHandling: 'preserve' });
   }
 
   goToEdit(id: string): void {
-    this.router.navigate(['/customers/edit', id]);
+    this.router.navigate(['/customers/edit', id], { queryParamsHandling: 'preserve' });
   }
 
   confirmDelete(id: string): void {
