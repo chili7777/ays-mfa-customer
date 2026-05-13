@@ -24,7 +24,7 @@
       </div>
       <h1 class="h3 mb-2 fw-bold">
         {{isEdit ? 'Actualizar Información' : 'Registro de Cliente'}}
-        <span class="text-secondary small ms-2" style="font-size: 14px; opacity: 0.7; font-weight: 400;">({{ userRole() }})</span>
+        <span *ngIf="userRole() && userRole() !== 'USER'" class="text-secondary small ms-2" style="font-size: 14px; opacity: 0.7; font-weight: 400;">({{ userRole() }})</span>
       </h1>
       <p class="text-secondary px-4">
         {{

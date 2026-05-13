@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CustomerService } from '../../services/customer.service';
 import { Customer } from '../../interfaces/customer.interface';
 import { MfeBridgeService } from '../../../core/services/mfe-bridge.service';
+import { ErrorModelDto } from '../../../core/interfaces/error.interface';
 
 @Component({
   selector: 'app-customers-list',
@@ -25,6 +26,7 @@ export class CustomersListComponent implements OnInit {
   loading = signal<boolean>(false);
   showDeleteModal = signal<boolean>(false);
   deleteId = signal<string>('');
+  integrityError = signal<string | null>(null);
 
   // Datos sincronizados desde el Bridge
   userRole = computed(() => this.mfeBridge.sessionData().role?.toUpperCase() || null);
@@ -155,6 +157,7 @@ export class CustomersListComponent implements OnInit {
 
   confirmDelete(id: string): void {
     this.deleteId.set(id);
+    this.integrityError.set(null);
     this.showDeleteModal.set(true);
   }
 
@@ -165,10 +168,16 @@ export class CustomersListComponent implements OnInit {
         next: () => {
           this.customers.update(prev => prev.filter(c => c.id !== id));
           this.showDeleteModal.set(false);
+          this.integrityError.set(null);
         },
         error: (err: any) => {
-          console.error('Error al eliminar', err);
-          this.showDeleteModal.set(false);
+          const errorData: ErrorModelDto = err.error;
+          if (errorData?.detail === "No se puede eliminar o modificar el registro porque tiene información relacionada vinculada.") {
+            this.integrityError.set("No es posible eliminar el cliente porque tiene cuentas asociadas. Por favor, gestione las cuentas primero.");
+          } else {
+            console.error('Error al eliminar', err);
+            this.showDeleteModal.set(false);
+          }
         }
       });
     }
