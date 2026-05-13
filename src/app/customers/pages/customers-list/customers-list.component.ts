@@ -26,18 +26,43 @@ export class CustomersListComponent implements OnInit {
   userRole = signal<string>(this.getInitialRole());
   currentClientId = signal<string | null>(localStorage.getItem('clientId'));
 
-  isAdmin = computed(() => this.userRole() === 'ADMIN');
+  isAdmin = computed(() => {
+    const role = this.userRole().toUpperCase();
+    return role.includes('ADMIN') || role.includes('GESTOR') || role.includes('ROOT') || role.includes('MANAGER');
+  });
 
   private getInitialRole(): string {
-    const rawRole = localStorage.getItem('userRole') || localStorage.getItem('role');
+    // 1. Intentar desde localStorage (varias llaves comunes)
+    const rawRole = localStorage.getItem('userRole') ||
+                    localStorage.getItem('role') ||
+                    localStorage.getItem('user_role') ||
+                    localStorage.getItem('roleName');
     if (rawRole) return rawRole.trim().toUpperCase();
 
+    // 2. Intentar desde sessionStorage
+    const sessionRole = sessionStorage.getItem('userRole') || sessionStorage.getItem('role');
+    if (sessionRole) return sessionRole.trim().toUpperCase();
+
+    // 3. Intentar parsear objeto 'user'
     try {
-      const userData = localStorage.getItem('user');
+      const userData = localStorage.getItem('user') || sessionStorage.getItem('user');
       if (userData) {
         const user = JSON.parse(userData);
-        if (user && user.role) return user.role.toString().trim().toUpperCase();
-        if (user && user.userRole) return user.userRole.toString().trim().toUpperCase();
+        const roleValue = user.role || user.userRole || user.type || user.roleName || user.roles?.[0];
+        if (roleValue) return roleValue.toString().trim().toUpperCase();
+      }
+    } catch (e) {}
+
+    // 4. Intentar desde cookies
+    try {
+      const cookies = document.cookie.split(';');
+      for (let c of cookies) {
+        const parts = c.trim().split('=');
+        if (parts.length === 2) {
+          const key = parts[0];
+          const value = parts[1];
+          if (key === 'role' || key === 'userRole') return decodeURIComponent(value).trim().toUpperCase();
+        }
       }
     } catch (e) {}
 

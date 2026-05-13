@@ -152,6 +152,14 @@
         </div>
         <h3>No se encontraron clientes</h3>
         <p>Intenta ajustar tu búsqueda o crea un nuevo cliente para comenzar a gestionar tus usuarios.</p>
+
+        <!-- Botón de acción en estado vacío (Solo Admin) -->
+        <div class="mt-4" *ngIf="isAdmin()">
+          <button class="btn btn-success d-flex align-items-center gap-2 mx-auto px-4 py-2" (click)="goToCreate()">
+            <span class="material-icons">person_add</span>
+            + Nuevo Cliente
+          </button>
+        </div>
       </div>
     </section>
   </div>
