@@ -23,14 +23,16 @@ export class CustomersListComponent implements OnInit {
   loading = signal<boolean>(false);
   showDeleteModal = signal<boolean>(false);
   deleteId = signal<string>('');
-  userRole = signal<string>(localStorage.getItem('userRole') || 'USER');
+  userRole = signal<string>((localStorage.getItem('userRole') || 'USER').trim().toUpperCase());
   currentClientId = signal<string | null>(localStorage.getItem('clientId'));
+
+  isAdmin = computed(() => this.userRole() === 'ADMIN');
 
   filteredCustomers = computed(() => {
     let list = this.customers();
 
     // Filtro por rol
-    if (this.userRole() !== 'ADMIN' && this.currentClientId()) {
+    if (!this.isAdmin() && this.currentClientId()) {
       list = list.filter(c => c.id === this.currentClientId());
     }
 
@@ -60,7 +62,7 @@ export class CustomersListComponent implements OnInit {
     this.loading.set(true);
 
     // Si es USER, cargar solo su perfil específico
-    if (this.userRole() !== 'ADMIN' && this.currentClientId()) {
+    if (!this.isAdmin() && this.currentClientId()) {
       this.customerService.getCustomerById(this.currentClientId()!).subscribe({
         next: (data) => {
           this.customers.set([data]);
@@ -93,7 +95,7 @@ export class CustomersListComponent implements OnInit {
 
   onStatusClick(event: MouseEvent, customer: Customer): void {
     event.stopPropagation();
-    if (this.userRole() === 'ADMIN') {
+    if (this.isAdmin()) {
       this.toggleStatus(customer);
     }
   }
