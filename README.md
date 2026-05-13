@@ -68,6 +68,38 @@ El proyecto está configurado para desplegarse automáticamente en **Digital Oce
 
 ---
 
+## 📂 Ecosistema de Proyectos
+
+Este micro-frontend forma parte de un ecosistema más amplio. A continuación, se detallan los proyectos relacionados:
+
+- **[ays-shl-account-management](https://github.com/chili7777/ays-shl-account-management)**: Aplicación **Shell** principal que orquesta y contiene todos los micro-frontends.
+- **[ays-mfa-customer](https://github.com/chili7777/ays-mfa-customer)**: Micro-frontend para la gestión de **clientes** (este repositorio).
+- **[ays-mfa-account](https://github.com/chili7777/ays-mfa-account)**: Micro-frontend dedicado a la administración de **cuentas** bancarias.
+- **[ays-mfa-movements](https://github.com/chili7777/ays-mfa-movements)**: Micro-frontend para la visualización y gestión de **movimientos** y transacciones.
+- **[ays-msa-dm-cuaa-cr-account](https://github.com/chili7777/ays-msa-dm-cuaa-cr-account)**: Microservicio (Backend) encargado de la lógica de negocio de **cuentas**.
+- **[ays-msa-dm-pain-cr-movement](https://github.com/chili7777/ays-msa-dm-pain-cr-movement)**: Microservicio (Backend) encargado de procesar **movimientos** y transacciones.
+- **[ays-custom-instructions](https://github.com/chili7777/ays-custom-instructions)**: Repositorio con instrucciones personalizadas y configuraciones transversales del proyecto.
+
+---
+
+## 🔐 Credenciales de Acceso
+
+Para probar las diferentes funcionalidades según el rol, se pueden utilizar las siguientes credenciales:
+
+### Perfil Administrador (BackOffice)
+- **Usuario:** `0103322228`
+- **Contraseña:** `asdfghjk`
+
+### Perfil Usuario (App de Transferencias)
+- **Opción 1:**
+  - **Usuario:** `1718048232`
+  - **Contraseña:** `qwertyui`
+- **Opción 2:**
+  - **Usuario:** `1718048315`
+  - **Contraseña:** `zxcvbnmq`
+
+---
+
 ## 🛠️ Comandos Útiles
 
 - **Build de producción**: `npm run build`
