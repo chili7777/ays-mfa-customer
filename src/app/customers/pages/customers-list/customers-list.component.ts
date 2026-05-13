@@ -143,6 +143,10 @@ export class CustomersListComponent implements OnInit {
     this.router.navigate(['/customers/detail', id], { queryParamsHandling: 'preserve' });
   }
 
+  goToAccounts(id: string): void {
+    this.router.navigate(['/accounts'], { queryParams: { clientId: id }, queryParamsHandling: 'merge' });
+  }
+
   goToEdit(id: string): void {
     this.router.navigate(['/customers/edit', id], { queryParamsHandling: 'preserve' });
   }

@@ -44,9 +44,9 @@
 
       <!-- Vista de Móvil: Lista minimalista (Solo Admin) -->
       <div class="show-mobile-only" *ngIf="!loading() && isAdmin()">
-        <div class="px-3 cursor-pointer" *ngFor="let customer of filteredCustomers()" (click)="goToDetail(customer.id)">
+        <div class="px-3" *ngFor="let customer of filteredCustomers()">
           <div class="py-3 d-flex justify-content-between align-items-center" style="border-bottom: 1px solid var(--border-color, rgba(43, 49, 57, 0.5));">
-            <div class="flex-grow-1">
+            <div class="flex-grow-1 cursor-pointer" (click)="goToAccounts(customer.id)">
               <!-- Nombre y Luz de Estado (No quitar luz verde o roja) -->
               <div class="d-flex align-items-center gap-2 mb-1">
                 <span [class]="customer.status ? 'status-dot active' : 'status-dot'"></span>
@@ -84,7 +84,12 @@
                 </span>
               </div>
             </div>
-            <span class="material-icons text-secondary">chevron_right</span>
+            <div class="d-flex flex-column align-items-center gap-2">
+              <span class="material-icons text-secondary cursor-pointer" (click)="goToAccounts(customer.id)" title="Ver Cuentas">chevron_right</span>
+              <button class="btn-icon text-primary" (click)="goToDetail(customer.id)" title="Ver Detalle">
+                <span class="material-icons" style="font-size: 20px;">visibility</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -103,7 +108,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let customer of filteredCustomers()" (click)="goToDetail(customer.id)" class="cursor-pointer">
+            <tr *ngFor="let customer of filteredCustomers()" (click)="goToAccounts(customer.id)" class="cursor-pointer">
               <td>
                 <div class="d-flex align-items-center gap-2">
                   <span [class]="customer.status ? 'status-dot active' : 'status-dot'"></span>
@@ -126,6 +131,14 @@
               </td>
               <td class="text-end" *ngIf="isAdmin()">
                 <div class="d-flex justify-content-end gap-2">
+                  <button class="btn btn-primary btn-sm d-flex align-items-center gap-1" (click)="$event.stopPropagation(); goToDetail(customer.id)" title="Ver Detalle">
+                    <span class="material-icons" style="font-size: 16px;">visibility</span>
+                    <span class="d-none d-md-inline">Detalle</span>
+                  </button>
+                  <button class="btn btn-info btn-sm d-flex align-items-center gap-1 text-white" (click)="$event.stopPropagation(); goToAccounts(customer.id)" title="Ver Cuentas">
+                    <span class="material-icons" style="font-size: 16px;">account_balance</span>
+                    <span class="d-none d-md-inline">Cuentas</span>
+                  </button>
                   <button class="btn btn-warning btn-sm d-flex align-items-center gap-1" (click)="$event.stopPropagation(); goToEdit(customer.id)" title="Editar">
                     <span class="material-icons" style="font-size: 16px;">edit</span>
                     <span class="d-none d-md-inline">Editar</span>
@@ -143,13 +156,16 @@
 
       <!-- Vista de Usuario (No Admin): Solo muestra el nombre -->
       <div *ngIf="!loading() && !isAdmin()" class="py-5 text-center animate-fade-in">
-        <div *ngIf="filteredCustomers().length > 0" (click)="goToDetail(filteredCustomers()[0].id)" class="user-profile-summary">
+        <div *ngIf="filteredCustomers().length > 0" (click)="goToAccounts(filteredCustomers()[0].id)" class="user-profile-summary">
           <div class="profile-avatar-large mb-3">
             <span class="material-icons text-primary">account_circle</span>
           </div>
           <h1 class="display-6 fw-bold mb-1">{{ filteredCustomers()[0].name }}</h1>
-          <p class="text-secondary">Bienvenido a su portal de cliente. Haga clic para ver su perfil completo.</p>
-          <button class="btn btn-outline-primary mt-3">Ver Detalle</button>
+          <p class="text-secondary">Bienvenido a su portal de cliente. Haga clic para ver sus cuentas.</p>
+          <div class="d-flex justify-content-center gap-2 mt-3">
+            <button class="btn btn-secondary" (click)="$event.stopPropagation(); goToDetail(filteredCustomers()[0].id)">Ver Detalle</button>
+            <button class="btn btn-primary" (click)="$event.stopPropagation(); goToAccounts(filteredCustomers()[0].id)">Ver Cuentas</button>
+          </div>
         </div>
 
         <div *ngIf="filteredCustomers().length === 0" class="py-4">

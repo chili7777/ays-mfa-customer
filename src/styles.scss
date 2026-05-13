@@ -188,6 +188,17 @@ h1, h2, h3, h4, h5, h6 {
   border-color: $theme-dark-error;
 }
 
+.btn-info {
+  background-color: rgba(0, 172, 230, 0.15);
+  color: #00ace6;
+  border: 1px solid rgba(0, 172, 230, 0.3);
+}
+
+.btn-info:hover {
+  background-color: rgba(0, 172, 230, 0.25);
+  border-color: #00ace6;
+}
+
 /* Inputs - Minimalist Underline Style */
 .form-control {
   display: block;
@@ -537,6 +548,16 @@ input:disabled + .slider {
 .cursor-pointer { cursor: pointer !important; }
 .overflow-hidden { overflow: hidden !important; }
 .border-bottom { border-bottom: 1px solid $theme-dark-border !important; }
+
+/* Color Utilities */
+.text-primary { color: $theme-dark-accent !important; }
+.text-success { color: $theme-dark-success !important; }
+.text-warning { color: $theme-dark-warning !important; }
+.text-danger { color: $theme-dark-error !important; }
+.text-secondary { color: $theme-dark-text-secondary !important; }
+.text-info { color: #00ace6 !important; }
+.text-white { color: #ffffff !important; }
+.text-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* Responsive Display Utilities */
 .d-none { display: none !important; }
